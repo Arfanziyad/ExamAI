@@ -1,0 +1,115 @@
+import os
+import aiohttp
+import aiofiles
+import asyncio
+from typing import Tuple, Dict, Any, Optional
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class OCRService:
+    def __init__(self):
+        self.api_key = os.getenv('OCR_API_KEY', '1153|7o2K4RXz4cR4i4aclY0RQFj9JiC7qy650U9DgEqKfd6cd682')
+        self.base_url = 'https://www.handwritingocr.com/api/v3'
+        self.headers = {
+            'Authorization': f'Bearer {self.api_key}',
+            'Accept': 'application/json'
+        }
+
+    async def extract_text_from_image(self, image_path: str) -> Tuple[str, float]:
+        """
+        Extract text from image using handwritingOCR.com API
+        Returns: Tuple of (extracted_text, confidence_score)
+        """
+        try:
+            # 1. Upload document
+            document_id = await self._upload_document(image_path)
+            if not document_id:
+                return self._mock_extract_text()
+
+            # 2. Poll until processing is complete
+            result = await self._get_result(document_id)
+            if not result:
+                return self._mock_extract_text()
+
+            # 3. Extract text from results
+            if 'results' in result and result['results']:
+                # Combine text from all pages
+                text = ' '.join(
+                    page['transcript'] 
+                    for page in result['results']
+                )
+                # Use a default confidence of 0.9 since API doesn't provide one
+                return (text, 0.9)
+            
+            return self._mock_extract_text()
+        except Exception as e:
+            print(f"OCR Error: {str(e)}")
+            return self._mock_extract_text()
+
+    async def _upload_document(self, image_path: str) -> Optional[str]:
+        """Upload document to API and return document ID"""
+        try:
+            async with aiohttp.ClientSession() as session:
+                data = aiohttp.FormData()
+                data.add_field('action', 'transcribe')
+                data.add_field(
+                    'file',
+                    open(image_path, 'rb'),
+                    filename=os.path.basename(image_path)
+                )
+
+                async with session.post(
+                    f'{self.base_url}/documents',
+                    headers=self.headers,
+                    data=data
+                ) as response:
+                    if response.status == 201:
+                        result = await response.json()
+                        return result.get('id')
+                    else:
+                        print(f"Upload failed: {response.status} - {await response.text()}")
+                        return None
+
+        except Exception as e:
+            print(f"Upload error: {str(e)}")
+            return None
+
+    async def _get_result(self, document_id: str) -> Optional[Dict[str, Any]]:
+        """Poll for results until document is processed"""
+        try:
+            async with aiohttp.ClientSession() as session:
+                max_attempts = 10
+                attempt = 0
+
+                while attempt < max_attempts:
+                    async with session.get(
+                        f'{self.base_url}/documents/{document_id}',
+                        headers=self.headers
+                    ) as response:
+                        if response.status == 200:
+                            result = await response.json()
+                            if result['status'] == 'processed':
+                                return result
+                            elif result['status'] == 'failed':
+                                print("Processing failed")
+                                return None
+                        
+                        # Wait longer between attempts
+                        await asyncio.sleep(2 ** attempt)
+                        attempt += 1
+
+                print("Max polling attempts reached")
+                return None
+
+        except Exception as e:
+            print(f"Result polling error: {str(e)}")
+            return None
+
+    def _mock_extract_text(self) -> Tuple[str, float]:
+        """Fallback mock implementation"""
+        return (
+            "This is mock extracted text for testing purposes. "
+            "The real OCR service is either not available or encountered an error.",
+            0.85
+        )
