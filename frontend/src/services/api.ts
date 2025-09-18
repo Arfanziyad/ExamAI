@@ -7,19 +7,17 @@ export interface OCRResult {
 }
 
 export async function uploadQuestions(
-  questionFile: File,
-  modelAnswerFile: File,
+  questionText: string,
+  answerText: string,
   title = 'Untitled Test',
   subject = 'general',
   description = ''
 ): Promise<{
   id: string;
-  questionOCR: OCRResult;
-  answerOCR: OCRResult;
 }> {
   const formData = new FormData();
-  formData.append('file', questionFile);
-  formData.append('answer_file', modelAnswerFile);
+  formData.append('question_text', questionText);
+  formData.append('answer_text', answerText);
   formData.append('title', title);
   formData.append('subject', subject);
   if (description) formData.append('description', description);
@@ -31,10 +29,11 @@ export async function uploadQuestions(
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Failed to upload questions: ${response.status} ${text}`);
+    throw new Error(`Failed to create question paper: ${response.status} ${text}`);
   }
 
-  return response.json();
+  const result = await response.json();
+  return { id: result.id };
 }
 
 export async function verifyOCRText(

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import FileUpload from './FileUpload';
 import { uploadQuestions } from '../services';
 
 interface QuestionUploadProps {
@@ -17,110 +16,109 @@ const QuestionUpload: React.FC<QuestionUploadProps> = ({
   const [title, setTitle] = useState('Untitled Test');
   const [subject, setSubject] = useState('general');
   const [description, setDescription] = useState('');
-  const [showTitleInput, setShowTitleInput] = useState(false);
-  const [showSubjectInput, setShowSubjectInput] = useState(false);
-  const [selectedQuestionFile, setSelectedQuestionFile] = useState<File | null>(null);
-  const [selectedAnswerFile, setSelectedAnswerFile] = useState<File | null>(null);
-
-  const handleQuestionFileSelect = (file: File | null) => {
-    setSelectedQuestionFile(file);
-  };
-
-  const handleAnswerFileSelect = (file: File | null) => {
-    setSelectedAnswerFile(file);
-  };
+  const [questionText, setQuestionText] = useState('');
+  const [answerText, setAnswerText] = useState('');
 
   const handleSubmit = async () => {
-    if (!selectedQuestionFile || !selectedAnswerFile) {
-      setMessage('Please select both question paper and answer key files.');
+    if (!questionText || !answerText) {
+      setMessage('Please enter both question and answer text.');
       return;
     }
     try {
       onUploadStart?.();
-      await uploadQuestions(selectedQuestionFile, selectedAnswerFile, title, subject, description);
-      setMessage('Test uploaded successfully!');
+      await uploadQuestions(questionText, answerText, title, subject, description);
+      setMessage('Test created successfully!');
       onUploadComplete?.();
       // Clear the form
-      setSelectedQuestionFile(null);
-      setSelectedAnswerFile(null);
+      setQuestionText('');
+      setAnswerText('');
       setTitle('Untitled Test');
       setSubject('general');
       setDescription('');
     } catch (error) {
-      setMessage('Error uploading test. Please try again.');
+      setMessage('Error creating test. Please try again.');
       onUploadError?.();
+      console.error('Error:', error);
     }
   };
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold">Upload Questions</h2>
+      <h2 className="text-xl font-bold">Create Test</h2>
 
-      <div className="flex gap-3">
-        <button
-          onClick={() => setShowTitleInput(v => !v)}
-          className="flex-1 py-2 px-3 bg-white border rounded-lg shadow-sm hover:shadow-md text-left"
-        >
-          <div className="text-xs text-gray-500">Test Title</div>
-          <div className="text-sm font-medium">{title}</div>
-        </button>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Test Title</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full border rounded px-3 py-2"
+            placeholder="Enter test title"
+          />
+        </div>
 
-        <button
-          onClick={() => setShowSubjectInput(v => !v)}
-          className="w-40 py-2 px-3 bg-white border rounded-lg shadow-sm hover:shadow-md text-left"
-        >
-          <div className="text-xs text-gray-500">Subject</div>
-          <div className="text-sm font-medium capitalize">{subject}</div>
-        </button>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Subject</label>
+          <input
+            type="text"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            className="w-full border rounded px-3 py-2"
+            placeholder="Enter subject (e.g. science, math)"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Description (Optional)</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full border rounded px-3 py-2 h-24"
+            placeholder="Enter test description"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Questions</label>
+          <textarea
+            value={questionText}
+            onChange={(e) => setQuestionText(e.target.value)}
+            className="w-full border rounded px-3 py-2 h-48"
+            placeholder="Enter your questions here..."
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Answer Key</label>
+          <textarea
+            value={answerText}
+            onChange={(e) => setAnswerText(e.target.value)}
+            className="w-full border rounded px-3 py-2 h-48"
+            placeholder="Enter the answer key here..."
+          />
+        </div>
       </div>
-
-      {showTitleInput && (
-        <input
-          className="w-full border rounded px-3 py-2"
-          placeholder="Test title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      )}
-
-      {showSubjectInput && (
-        <input
-          className="w-full border rounded px-3 py-2"
-          placeholder="Subject (e.g. science, math)"
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-        />
-      )}
-
-      <textarea
-        className="w-full border rounded px-3 py-2"
-        placeholder="Description (optional)"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-
-      <FileUpload
-        onFileSelect={handleQuestionFileSelect}
-        acceptedTypes=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-        label="Select question paper file"
-        selectedFile={selectedQuestionFile}
-      />
-
-      <FileUpload
-        onFileSelect={handleAnswerFileSelect}
-        acceptedTypes=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-        label="Select model answer file"
-        selectedFile={selectedAnswerFile}
-      />
 
       <button
         onClick={handleSubmit}
         className="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition-colors"
+        disabled={!questionText || !answerText}
       >
-        Upload Files
+        Create Test
       </button>
 
-      {message && <p className="text-green-600">{message}</p>}
+      {message && (
+        <div 
+          className={`mt-4 p-4 rounded ${
+            message.includes('Error') 
+              ? 'bg-red-50 text-red-700 border border-red-300' 
+              : 'bg-green-50 text-green-700 border border-green-300'
+          }`}
+        >
+          {message}
+        </div>
+      )}
     </div>
   );
 };

@@ -73,7 +73,16 @@ async def startup_event():
     logger.info("Database tables created")
 
 # Mount static files
-app.mount("/files", StaticFiles(directory="./storage"), name="files")
+try:
+    storage_path = os.path.join(os.path.dirname(__file__), "storage")
+    if not os.path.exists(storage_path):
+        os.makedirs(storage_path)
+    app.mount("/files", StaticFiles(directory=storage_path), name="files")
+    logger.info(f"Successfully mounted static files directory: {storage_path}")
+except Exception as e:
+    logger.error(f"Error mounting static files directory: {str(e)}")
+    # Continue without static files rather than crashing
+    pass
 
 # Health check endpoint
 @app.get("/")
@@ -87,83 +96,78 @@ async def create_question_paper(
     title: str = Form(...),
     subject: str = Form(...),
     description: Optional[str] = Form(None),
-    file: UploadFile = File(...),
-    answer_file: UploadFile = File(...),
+    question_text: str = Form(...),
+    answer_text: str = Form(...),
     db: Session = Depends(get_db)
 ):
-    """Upload a question paper and model answer"""
+    """Create a question paper with direct text input"""
     try:
-        # Process question paper file
+        logger.info(f"Received request to create question paper with title: {title}")
+        
+        # Validate input data
+        if not title or not title.strip():
+            raise HTTPException(status_code=400, detail="Title is required")
+        if not subject or not subject.strip():
+            raise HTTPException(status_code=400, detail="Subject is required")
+        if not question_text or not question_text.strip():
+            raise HTTPException(status_code=400, detail="Question text is required")
+        if not answer_text or not answer_text.strip():
+            raise HTTPException(status_code=400, detail="Answer text is required")
+            
+        # Create question paper record with direct text input
         try:
-            question_info = await file_service.save_question_paper(file, file_type="question")
-            question_ocr = OCRResult(
-                extracted_text=question_info.get('extracted_text'),
-                confidence=question_info.get('confidence'),
-                validation_result=None,
-                error=None
+            # Clean input data
+            cleaned_title = title.strip()
+            cleaned_subject = subject.strip()
+            cleaned_description = description.strip() if description else None
+            cleaned_question_text = question_text.strip()
+            cleaned_answer_text = answer_text.strip()
+            
+            question_paper = QuestionPaper(
+                title=cleaned_title,
+                subject=cleaned_subject,
+                description=cleaned_description,
+                question_text=cleaned_question_text,
+                answer_text=cleaned_answer_text,
+                file_path=None,
+                answer_file_path=None
             )
-        except OCRError as e:
-            logger.warning(f"OCR failed for question file: {str(e)}")
-            question_ocr = OCRResult(
-                extracted_text=None,
-                confidence=None,
-                validation_result=None,
-                error=handle_ocr_error(e)
-            )
-
-        # Process model answer file
-        try:
-            answer_info = await file_service.save_question_paper(answer_file, file_type="model_answer")
-            answer_ocr = OCRResult(
-                extracted_text=answer_info.get('extracted_text'),
-                confidence=answer_info.get('confidence'),
-                validation_result=None,
-                error=None
-            )
-        except OCRError as e:
-            logger.warning(f"OCR failed for answer file: {str(e)}")
-            answer_ocr = OCRResult(
-                extracted_text=None,
-                confidence=None,
-                validation_result=None,
-                error=handle_ocr_error(e)
-            )
-
-        # Validate results
-        if (not question_info.get('file_path') or not answer_info.get('file_path')):
+            
+            # Attempt database operations
+            try:
+                db.add(question_paper)
+                db.commit()
+                db.refresh(question_paper)
+                
+                logger.info(f"Question paper created with ID: {question_paper.id}")
+                return question_paper
+                
+            except Exception as db_err:
+                db.rollback()
+                logger.error(f"Database error creating question paper: {str(db_err)}")
+                raise HTTPException(
+                    status_code=500, 
+                    detail=f"Database error: {str(db_err)}"
+                )
+                
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error preparing question paper data: {str(e)}")
             raise HTTPException(
-                status_code=400,
-                detail="Failed to save uploaded files"
+                status_code=500, 
+                detail=f"Error preparing data: {str(e)}"
             )
-
-        # Create question paper record
-        question_paper = QuestionPaper(
-            title=title,
-            subject=subject,
-            description=description,
-            file_path=question_info['file_path'],
-            answer_file_path=answer_info['file_path'],
-            question_text=text(question_ocr.extracted_text) if question_ocr.extracted_text else None,
-            answer_text=text(answer_ocr.extracted_text) if answer_ocr.extracted_text else None,
-            question_ocr=question_ocr.dict(),
-            answer_ocr=answer_ocr.dict()
-        )
-        
-        db.add(question_paper)
-        db.commit()
-        db.refresh(question_paper)
-        
-        logger.info(f"Question paper created: {question_paper.id}")
-        return question_paper
-        
-    except OCRError as e:
-        db.rollback()
-        logger.error(f"OCR error while creating question paper: {str(e)}")
-        raise_http_error(e)
+            
+    except HTTPException as http_err:
+        logger.error(f"HTTP error creating question paper: {str(http_err.detail)}")
+        raise
     except Exception as e:
-        db.rollback()
-        logger.error(f"Failed to create question paper: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Unexpected error in create_question_paper: {str(e)}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Unexpected error: {str(e)}"
+        )
 
 @app.get("/api/question-papers", response_model=List[QuestionPaperResponse])
 async def get_question_papers(db: Session = Depends(get_db)):

@@ -1,0 +1,279 @@
+[32mINFO[0m:     2025-09-18 09:31:05 | Starting server with enhanced logging configuration
+[32mINFO[0m:     2025-09-18 09:31:05 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final']
+[32mINFO[0m:     2025-09-18 09:31:05 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final']
+[32mINFO[0m:     2025-09-18 09:31:05 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final']
+[32mINFO[0m:     2025-09-18 09:31:05 | Server configuration complete, starting server...
+[36mDEBUG[0m:    2025-09-18 09:31:05 | Using selector: SelectSelector
+[32mINFO[0m:     2025-09-18 09:31:06 | EvaluatorService initialized with SubjectiveEvaluator
+[32mINFO[0m:     2025-09-18 09:31:06 | Successfully mounted static files directory: c:\Projects\AI_simple_final\backend\storage
+[32mINFO[0m:     2025-09-18 09:31:06 | Started server process [[36m21144[0m]
+[32mINFO[0m:     2025-09-18 09:31:06 | Started server process [[36m21144[0m]
+[32mINFO[0m:     2025-09-18 09:31:06 | Started server process [[36m21144[0m]
+[32mINFO[0m:     2025-09-18 09:31:06 | Waiting for application startup.
+[32mINFO[0m:     2025-09-18 09:31:06 | Waiting for application startup.
+[32mINFO[0m:     2025-09-18 09:31:06 | Waiting for application startup.
+[32mINFO[0m:     2025-09-18 09:31:06 | BEGIN (implicit)
+[32mINFO[0m:     2025-09-18 09:31:06 | BEGIN (implicit)
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("question_papers")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("question_papers")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("question_papers")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("question_papers")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("questions")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("questions")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("questions")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("questions")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("answer_schemes")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("answer_schemes")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("answer_schemes")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("answer_schemes")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("submissions")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("submissions")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("submissions")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("submissions")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("evaluations")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA main.table_info("evaluations")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("evaluations")
+[32mINFO[0m:     2025-09-18 09:31:06 | PRAGMA temp.table_info("evaluations")
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [raw sql] ()
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-09-18 09:31:06 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE question_papers (
+	id INTEGER NOT NULL, 
+	title VARCHAR NOT NULL, 
+	subject VARCHAR NOT NULL, 
+	description TEXT, 
+	question_text TEXT NOT NULL, 
+	answer_text TEXT NOT NULL, 
+	file_path VARCHAR, 
+	answer_file_path VARCHAR, 
+	created_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE question_papers (
+	id INTEGER NOT NULL, 
+	title VARCHAR NOT NULL, 
+	subject VARCHAR NOT NULL, 
+	description TEXT, 
+	question_text TEXT NOT NULL, 
+	answer_text TEXT NOT NULL, 
+	file_path VARCHAR, 
+	answer_file_path VARCHAR, 
+	created_at DATETIME, 
+	PRIMARY KEY (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00115s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00115s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_question_papers_id ON question_papers (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_question_papers_id ON question_papers (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00060s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00060s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE questions (
+	id INTEGER NOT NULL, 
+	question_paper_id INTEGER NOT NULL, 
+	question_text TEXT NOT NULL, 
+	question_number INTEGER NOT NULL, 
+	max_marks INTEGER, 
+	subject_area VARCHAR, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(question_paper_id) REFERENCES question_papers (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE questions (
+	id INTEGER NOT NULL, 
+	question_paper_id INTEGER NOT NULL, 
+	question_text TEXT NOT NULL, 
+	question_number INTEGER NOT NULL, 
+	max_marks INTEGER, 
+	subject_area VARCHAR, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(question_paper_id) REFERENCES question_papers (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00285s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00285s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_questions_id ON questions (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_questions_id ON questions (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00130s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00130s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE answer_schemes (
+	id INTEGER NOT NULL, 
+	question_id INTEGER NOT NULL, 
+	model_answer TEXT NOT NULL, 
+	key_points JSON, 
+	marking_criteria JSON, 
+	sample_answers JSON, 
+	created_at DATETIME, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(question_id) REFERENCES questions (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE answer_schemes (
+	id INTEGER NOT NULL, 
+	question_id INTEGER NOT NULL, 
+	model_answer TEXT NOT NULL, 
+	key_points JSON, 
+	marking_criteria JSON, 
+	sample_answers JSON, 
+	created_at DATETIME, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(question_id) REFERENCES questions (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00103s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00103s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_answer_schemes_id ON answer_schemes (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_answer_schemes_id ON answer_schemes (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00089s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00089s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE submissions (
+	id INTEGER NOT NULL, 
+	question_id INTEGER NOT NULL, 
+	student_name VARCHAR NOT NULL, 
+	handwriting_image_path VARCHAR NOT NULL, 
+	extracted_text TEXT, 
+	ocr_confidence FLOAT, 
+	submitted_at DATETIME, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(question_id) REFERENCES questions (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE submissions (
+	id INTEGER NOT NULL, 
+	question_id INTEGER NOT NULL, 
+	student_name VARCHAR NOT NULL, 
+	handwriting_image_path VARCHAR NOT NULL, 
+	extracted_text TEXT, 
+	ocr_confidence FLOAT, 
+	submitted_at DATETIME, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(question_id) REFERENCES questions (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00089s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00089s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_submissions_id ON submissions (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_submissions_id ON submissions (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00073s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00073s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE evaluations (
+	id INTEGER NOT NULL, 
+	submission_id INTEGER NOT NULL, 
+	similarity_score FLOAT NOT NULL, 
+	marks_awarded INTEGER NOT NULL, 
+	max_marks INTEGER NOT NULL, 
+	detailed_scores JSON, 
+	ai_feedback TEXT NOT NULL, 
+	manual_marks INTEGER, 
+	manual_feedback TEXT, 
+	is_manually_overridden INTEGER, 
+	evaluation_time FLOAT, 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(submission_id) REFERENCES submissions (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | 
+CREATE TABLE evaluations (
+	id INTEGER NOT NULL, 
+	submission_id INTEGER NOT NULL, 
+	similarity_score FLOAT NOT NULL, 
+	marks_awarded INTEGER NOT NULL, 
+	max_marks INTEGER NOT NULL, 
+	detailed_scores JSON, 
+	ai_feedback TEXT NOT NULL, 
+	manual_marks INTEGER, 
+	manual_feedback TEXT, 
+	is_manually_overridden INTEGER, 
+	evaluation_time FLOAT, 
+	created_at DATETIME, 
+	updated_at DATETIME, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(submission_id) REFERENCES submissions (id)
+)
+
+
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00099s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00099s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_evaluations_id ON evaluations (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | CREATE INDEX ix_evaluations_id ON evaluations (id)
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00057s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | [no key 0.00057s] ()
+[32mINFO[0m:     2025-09-18 09:31:06 | COMMIT
+[32mINFO[0m:     2025-09-18 09:31:06 | COMMIT
+[32mINFO[0m:     2025-09-18 09:31:06 | Database tables created
+[32mINFO[0m:     2025-09-18 09:31:06 | Application startup complete.
+[32mINFO[0m:     2025-09-18 09:31:06 | Application startup complete.
+[32mINFO[0m:     2025-09-18 09:31:06 | Application startup complete.
+[32mINFO[0m:     2025-09-18 09:31:06 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-09-18 09:31:06 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-09-18 09:31:06 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-09-18 09:31:06 | Shutting down
+[32mINFO[0m:     2025-09-18 09:31:06 | Shutting down
+[32mINFO[0m:     2025-09-18 09:31:06 | Shutting down
+[32mINFO[0m:     2025-09-18 09:31:06 | Waiting for application shutdown.
+[32mINFO[0m:     2025-09-18 09:31:06 | Waiting for application shutdown.
+[32mINFO[0m:     2025-09-18 09:31:06 | Waiting for application shutdown.
+[32mINFO[0m:     2025-09-18 09:31:06 | Application shutdown complete.
+[32mINFO[0m:     2025-09-18 09:31:06 | Application shutdown complete.
+[32mINFO[0m:     2025-09-18 09:31:06 | Application shutdown complete.
+[32mINFO[0m:     2025-09-18 09:31:06 | Finished server process [[36m21144[0m]
+[32mINFO[0m:     2025-09-18 09:31:06 | Finished server process [[36m21144[0m]
+[32mINFO[0m:     2025-09-18 09:31:06 | Finished server process [[36m21144[0m]

@@ -35,13 +35,11 @@ class QuestionPaperResponse(BaseModel):
     title: str
     subject: str
     description: Optional[str]
-    file_path: str
-    answer_file_path: str
-    question_text: Optional[str]
-    answer_text: Optional[str]
+    question_text: str
+    answer_text: str
+    file_path: Optional[str]
+    answer_file_path: Optional[str]
     created_at: datetime
-    question_ocr: Optional[OCRResult]
-    answer_ocr: Optional[OCRResult]
     
     class Config:
         from_attributes = True
