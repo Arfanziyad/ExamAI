@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:5000';
 
 export interface OCRResult {
   file_path: string;
@@ -58,22 +58,83 @@ export async function verifyOCRText(
   }
 }
 
-// Option 1: submitAnswer accepts only FormData
-export async function submitAnswer(formData: FormData): Promise<any> {
-  const response = await fetch(`${API_BASE_URL}/api/submissions`, {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Failed to submit answer: ${response.status} ${text}`);
-  }
-
-  return response.json();
+interface EvaluationResult {
+  similarity_score: number;
+  marks_awarded: number;
+  max_marks: number;
+  detailed_scores: Record<string, number>;
+  ai_feedback: string;
+  evaluation_time: string;
 }
 
-export async function getEvaluationResults(answerId: string | number) {
+interface SubmissionResponse {
+  id: number;
+  student_name: string;
+  handwriting_image_path: string;
+  extracted_text?: string;
+  ocr_confidence?: number;
+  evaluation?: EvaluationResult;
+}
+
+// Submit answer and receive evaluation
+export async function submitAnswer(formData: FormData): Promise<SubmissionResponse> {
+  try {
+    // Submit the answer - now with integrated OCR and evaluation
+    const response = await fetch(`${API_BASE_URL}/api/questions/${formData.get('question_id')}/submissions`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to submit answer: ${response.status} ${text}`);
+    }
+
+    const submission = await response.json();
+
+    // Check if evaluation is already included in the response
+    if (submission.evaluation) {
+      return submission;
+    }
+
+    // If no evaluation yet, wait and try to get it
+    console.log('Waiting for OCR and evaluation processing...');
+    
+    // Wait for processing to complete (OCR + evaluation)
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    try {
+      // Try to get evaluation results
+      const evaluationResponse = await fetch(`${API_BASE_URL}/api/submissions/${submission.id}/evaluation`);
+
+      if (evaluationResponse.ok) {
+        const evaluationData = await evaluationResponse.json();
+        return { 
+          ...submission, 
+          evaluation: {
+            similarity_score: evaluationData.similarity_score,
+            marks_awarded: evaluationData.marks_awarded,
+            max_marks: evaluationData.max_marks,
+            detailed_scores: evaluationData.detailed_scores,
+            ai_feedback: evaluationData.ai_feedback,
+            evaluation_time: evaluationData.evaluation_time
+          }
+        };
+      } else {
+        console.warn('Evaluation not ready yet');
+        return submission;
+      }
+    } catch (evalError) {
+      console.warn('Could not fetch evaluation:', evalError);
+      return submission;
+    }
+  } catch (error) {
+    console.error('Submission error:', error);
+    throw error;
+  }
+}
+
+export async function getEvaluationResults(answerId: string | number): Promise<EvaluationResult> {
   const response = await fetch(`${API_BASE_URL}/api/submissions/${answerId}/evaluation`);
 
   if (!response.ok) {

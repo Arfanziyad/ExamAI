@@ -1,7 +1,9 @@
 import time
 import logging
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from evaluators.subjective_evaluator import SubjectiveEvaluator
+from sqlalchemy.orm import Session
+from models import Submission, QuestionPaper, Question, AnswerScheme, Evaluation
 
 logger = logging.getLogger(__name__)
 
@@ -9,6 +11,148 @@ class EvaluatorService:
     def __init__(self):
         self.evaluator = SubjectiveEvaluator()
         logger.info("EvaluatorService initialized with SubjectiveEvaluator")
+    
+    async def evaluate_submission_with_ocr(
+        self, 
+        db: Session,
+        submission_id: int
+    ) -> Dict[str, Any]:
+        """
+        Evaluate a submission after OCR processing.
+        This method fetches the submission, its associated question, and model answer,
+        then performs the evaluation.
+        """
+        try:
+            # Get the submission
+            submission = db.query(Submission).filter(Submission.id == submission_id).first()
+            if not submission:
+                raise ValueError(f"Submission {submission_id} not found")
+                
+            extracted_text = getattr(submission, 'extracted_text', None)
+            if not extracted_text:
+                raise ValueError(f"No OCR text found for submission {submission_id}")
+
+            # Get the question and its model answer
+            question = db.query(Question).filter(Question.id == submission.question_id).first()
+            if not question:
+                raise ValueError(f"Question not found for submission {submission_id}")
+
+            # Get the question paper for context
+            question_paper = db.query(QuestionPaper).filter(QuestionPaper.id == question.question_paper_id).first()
+            if not question_paper:
+                raise ValueError(f"Question paper not found for question {question.id}")
+            
+            # Extract values from SQLAlchemy objects
+            question_text = str(getattr(question_paper, 'question_text', ''))
+            answer_text = str(getattr(question_paper, 'answer_text', ''))
+            subject_area = str(getattr(question, 'subject_area', 'general'))
+            max_marks = int(getattr(question, 'max_marks', 10))
+            
+            # Evaluate against model answer
+            evaluation_result = await self.evaluate_answer(
+                question_text=question_text,
+                student_answer=extracted_text,
+                model_answer=answer_text,
+                subject_area=subject_area,
+                max_marks=max_marks
+            )
+
+            # Create or update evaluation record
+            evaluation = Evaluation(
+                submission_id=submission_id,
+                similarity_score=evaluation_result['similarity_score'],
+                marks_awarded=evaluation_result['marks_awarded'],
+                max_marks=evaluation_result['max_marks'],
+                detailed_scores=evaluation_result['detailed_scores'],
+                ai_feedback=evaluation_result['ai_feedback'],
+                evaluation_time=evaluation_result['evaluation_time']
+            )
+            
+            db.add(evaluation)
+            db.commit()
+
+            return evaluation_result
+
+        except Exception as e:
+            logger.error(f"Evaluation failed for submission {submission_id}: {str(e)}")
+            return self._fallback_evaluation(10, str(e))
+
+    async def evaluate_submission(
+        self,
+        db: Session,
+        submission_id: int
+    ) -> Dict[str, Any]:
+        """
+        Evaluate a submission against its associated question's model answer
+        """
+        try:
+            # Get the submission and related data
+            submission = db.query(Submission).filter(Submission.id == submission_id).first()
+            if not submission:
+                raise ValueError(f"Submission {submission_id} not found")
+
+            # Extract submission text
+            extracted_text = getattr(submission, 'extracted_text', None)
+            if not extracted_text:
+                raise ValueError(f"No OCR text found for submission {submission_id}")
+
+            # Get the question and its model answer
+            question = db.query(Question).filter(Question.id == submission.question_id).first()
+            if not question:
+                raise ValueError(f"Question {submission.question_id} not found")
+
+            answer_scheme = db.query(AnswerScheme).filter(AnswerScheme.question_id == question.id).first()
+            if not answer_scheme:
+                raise ValueError(f"Answer scheme for question {question.id} not found")
+
+            # Get the question paper for context
+            question_paper = db.query(QuestionPaper).filter(QuestionPaper.id == question.question_paper_id).first()
+            if not question_paper:
+                raise ValueError(f"Question paper {question.question_paper_id} not found")
+
+            # Extract values from SQLAlchemy objects
+            question_text = str(getattr(question_paper, 'question_text', ''))
+            model_answer = str(getattr(answer_scheme, 'model_answer', ''))
+            subject_area = str(getattr(question, 'subject_area', 'general'))
+            max_marks = int(getattr(question, 'max_marks', 10))
+
+            # Evaluate the submission
+            evaluation_result = await self.evaluate_answer(
+                question_text=question_text,
+                student_answer=extracted_text,
+                model_answer=model_answer,
+                subject_area=subject_area,
+                max_marks=max_marks
+            )
+
+            # Create or update evaluation record
+            evaluation = db.query(Evaluation).filter(Evaluation.submission_id == submission_id).first()
+            if not evaluation:
+                evaluation = Evaluation(submission_id=submission_id)
+
+            # Update evaluation fields
+            for field, value in {
+                'similarity_score': evaluation_result['similarity_score'],
+                'marks_awarded': evaluation_result['marks_awarded'],
+                'max_marks': evaluation_result['max_marks'],
+                'detailed_scores': evaluation_result['detailed_scores'],
+                'ai_feedback': evaluation_result['ai_feedback'],
+                'evaluation_time': evaluation_result['evaluation_time']
+            }.items():
+                setattr(evaluation, field, value)
+
+            # Save to database
+            eval_id = getattr(evaluation, 'id', None)
+            if not eval_id:
+                db.add(evaluation)
+            db.commit()
+
+            return evaluation_result
+
+        except Exception as e:
+            logger.error(f"Evaluation failed: {str(e)}")
+            q_max_marks = int(getattr(question, 'max_marks', 10)) if question else 10
+            return self._fallback_evaluation(q_max_marks, str(e))
     
     async def evaluate_answer(
         self, 

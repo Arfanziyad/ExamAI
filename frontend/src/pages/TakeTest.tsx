@@ -46,9 +46,17 @@ const TakeTest: React.FC = () => {
       formData.append('student_name', studentName);
       formData.append('question_id', selectedTest);
 
-      await submitAnswer(formData);
-
+      const result = await submitAnswer(formData);
+      
       setSuccess(true);
+      
+      if (result.evaluation) {
+        // If evaluation was successful, redirect to results page
+        window.location.href = `/results?submissionId=${result.id}`;
+      } else {
+        // If OCR is still processing, show a message
+        alert('Your answer has been submitted successfully. The evaluation will be available shortly.');
+      }
 
       // Reset form
       setSelectedTest('');

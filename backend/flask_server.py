@@ -115,8 +115,8 @@ def create_question_paper():
         logger.error(f"Server error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
-@app.route("/api/submissions", methods=["POST"])
-def create_submission():
+@app.route("/api/questions/<int:question_id>/submissions", methods=["POST"])
+def create_submission(question_id):
     try:
         if 'file' not in request.files:
             return jsonify({"error": "No file provided"}), 400
@@ -126,7 +126,8 @@ def create_submission():
             return jsonify({"error": "No selected file"}), 400
 
         student_name = request.form.get('student_name')
-        question_id = request.form.get('question_id')
+        if not student_name:
+            return jsonify({"error": "Missing student_name"}), 400
 
         if not student_name or not question_id:
             return jsonify({"error": "Missing student_name or question_id"}), 400
@@ -149,7 +150,13 @@ def create_submission():
         # Save submission to database
         db = next(get_db())
         try:
-            from models import Submission
+            from models import Submission, Question, AnswerScheme
+            
+            # Verify question exists
+            question = db.query(Question).filter(Question.id == question_id).first()
+            if not question:
+                return jsonify({"error": "Question not found"}), 404
+            
             submission = Submission(
                 question_id=question_id,
                 student_name=student_name,
@@ -159,17 +166,81 @@ def create_submission():
             db.commit()
             db.refresh(submission)
 
+            # Get the actual integer ID from the database
+            from sqlalchemy import text
+            result = db.execute(text("SELECT id FROM submissions WHERE id = :id"), {"id": submission.id}).first()
+            actual_submission_id = result[0] if result else None
+            
+            if not actual_submission_id:
+                raise ValueError("Could not retrieve submission ID")
+
+            # Process OCR and evaluation
+            try:
+                from services.ocr_service import OCRService
+                from services.evaluator_service import EvaluatorService
+                
+                ocr_service = OCRService()
+                evaluator_service = EvaluatorService()
+                
+                # Run OCR synchronously
+                import asyncio
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                
+                try:
+                    # Extract text from image
+                    logger.info(f"Starting OCR for submission {actual_submission_id}")
+                    extracted_text, confidence = loop.run_until_complete(
+                        ocr_service.extract_text_from_image(file_path)
+                    )
+                    
+                    # Update submission with OCR results
+                    db.execute(
+                        text("UPDATE submissions SET extracted_text = :text, ocr_confidence = :conf WHERE id = :id"),
+                        {"text": extracted_text, "conf": confidence, "id": actual_submission_id}
+                    )
+                    db.commit()
+                    logger.info(f"OCR completed for submission {actual_submission_id}")
+                    
+                    # Run automatic evaluation
+                    logger.info(f"Starting evaluation for submission {actual_submission_id}")
+                    # Type assertion to fix SQLAlchemy Column issue
+                    evaluation_result = loop.run_until_complete(
+                        evaluator_service.evaluate_submission_with_ocr(db, actual_submission_id)
+                    )
+                    logger.info(f"Evaluation completed for submission {actual_submission_id}")
+                    
+                except Exception as ocr_eval_error:
+                    logger.error(f"OCR/Evaluation error: {str(ocr_eval_error)}")
+                    # Still return submission even if OCR/evaluation fails
+                    evaluation_result = None
+                finally:
+                    loop.close()
+
+            except Exception as process_error:
+                logger.error(f"Processing error: {str(process_error)}")
+                evaluation_result = None
+
             # Convert datetime to string for JSON serialization
             submitted_at = None
             if hasattr(submission, 'submitted_at') and submission.submitted_at is not None:
                 submitted_at = submission.submitted_at.isoformat()
 
-            return jsonify({
+            response_data = {
                 "id": submission.id,
+                "question_id": submission.question_id,
                 "student_name": submission.student_name,
-                "submitted_at": submitted_at,
-                "file_path": submission.handwriting_image_path
-            }), 201
+                "handwriting_image_path": submission.handwriting_image_path,
+                "extracted_text": getattr(submission, 'extracted_text', None),
+                "ocr_confidence": getattr(submission, 'ocr_confidence', None),
+                "submitted_at": submitted_at
+            }
+            
+            # Add evaluation result if available
+            if evaluation_result:
+                response_data["evaluation"] = evaluation_result
+
+            return jsonify(response_data), 201
 
         except Exception as e:
             db.rollback()
@@ -185,6 +256,176 @@ def create_submission():
         logger.error(f"Server error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
+@app.route("/api/submissions/<int:submission_id>/evaluation", methods=["GET"])
+def get_evaluation_results(submission_id):
+    try:
+        db = next(get_db())
+        try:
+            from models import Evaluation, Submission
+            
+            # Get evaluation for the submission
+            evaluation = db.query(Evaluation).filter(Evaluation.submission_id == submission_id).first()
+            if not evaluation:
+                return jsonify({"error": "Evaluation not found"}), 404
+            
+            # Get submission info for context
+            submission = db.query(Submission).filter(Submission.id == submission_id).first()
+            if not submission:
+                return jsonify({"error": "Submission not found"}), 404
+            
+            # Convert datetime to string for JSON serialization
+            created_at = None
+            if hasattr(evaluation, 'created_at') and evaluation.created_at is not None:
+                created_at = evaluation.created_at.isoformat()
+                
+            submitted_at = None
+            if hasattr(submission, 'submitted_at') and submission.submitted_at is not None:
+                submitted_at = submission.submitted_at.isoformat()
+
+            return jsonify({
+                "id": evaluation.id,
+                "submission_id": evaluation.submission_id,
+                "student_name": submission.student_name,
+                "similarity_score": evaluation.similarity_score,
+                "marks_awarded": evaluation.marks_awarded,
+                "max_marks": evaluation.max_marks,
+                "detailed_scores": evaluation.detailed_scores,
+                "ai_feedback": evaluation.ai_feedback,
+                "evaluation_time": evaluation.evaluation_time,
+                "created_at": created_at,
+                "submitted_at": submitted_at
+            })
+            
+        except Exception as e:
+            logger.error(f"Database error: {str(e)}")
+            return jsonify({"error": "Database error occurred"}), 500
+        finally:
+            db.close()
+            
+    except Exception as e:
+        logger.error(f"Server error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/submissions", methods=["GET"])
+def get_all_submissions():
+    try:
+        db = next(get_db())
+        try:
+            from models import Submission, Evaluation
+            
+            # Get all submissions with their evaluations
+            submissions = db.query(Submission).all()
+            result = []
+            
+            for submission in submissions:
+                # Get evaluation for this submission if it exists
+                evaluation = db.query(Evaluation).filter(Evaluation.submission_id == submission.id).first()
+                
+                submitted_at = None
+                if hasattr(submission, 'submitted_at') and submission.submitted_at is not None:
+                    submitted_at = submission.submitted_at.isoformat()
+                
+                submission_data = {
+                    "id": submission.id,
+                    "question_id": submission.question_id,
+                    "student_name": submission.student_name,
+                    "handwriting_image_path": submission.handwriting_image_path,
+                    "extracted_text": getattr(submission, 'extracted_text', None),
+                    "ocr_confidence": getattr(submission, 'ocr_confidence', None),
+                    "submitted_at": submitted_at,
+                    "evaluation": None
+                }
+                
+                if evaluation:
+                    evaluation_created_at = None
+                    if hasattr(evaluation, 'created_at') and evaluation.created_at is not None:
+                        evaluation_created_at = evaluation.created_at.isoformat()
+                        
+                    submission_data["evaluation"] = {
+                        "id": evaluation.id,
+                        "similarity_score": evaluation.similarity_score,
+                        "marks_awarded": evaluation.marks_awarded,
+                        "max_marks": evaluation.max_marks,
+                        "detailed_scores": evaluation.detailed_scores,
+                        "ai_feedback": evaluation.ai_feedback,
+                        "evaluation_time": evaluation.evaluation_time,
+                        "created_at": evaluation_created_at
+                    }
+                
+                result.append(submission_data)
+            
+            return jsonify(result)
+            
+        except Exception as e:
+            logger.error(f"Database error: {str(e)}")
+            return jsonify({"error": "Database error occurred"}), 500
+        finally:
+            db.close()
+            
+    except Exception as e:
+        logger.error(f"Server error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/submissions/<int:submission_id>/evaluate", methods=["POST"])
+def evaluate_submission(submission_id):
+    try:
+        db = next(get_db())
+        try:
+            from services.evaluator_service import EvaluatorService
+            from services.ocr_service import OCRService
+            evaluator = EvaluatorService()
+            ocr = OCRService()
+            
+            # Get submission and question details
+            from models import Submission, Question, QuestionPaper, Evaluation
+            from sqlalchemy import text
+            
+            # Get submission with explicit column access
+            submission = db.query(Submission).filter(Submission.id == submission_id).first()
+            if not submission:
+                return jsonify({"error": "Submission not found"}), 404
+            
+            # Get extracted text value safely
+            extracted_text = getattr(submission, 'extracted_text', None)
+            handwriting_path = getattr(submission, 'handwriting_image_path', None)
+            
+            if not extracted_text and handwriting_path:
+                # Run OCR synchronously
+                import asyncio
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    extracted_text, confidence = loop.run_until_complete(
+                        ocr.extract_text_from_image(str(handwriting_path))
+                    )
+                    # Update submission with OCR results
+                    db.execute(
+                        text("UPDATE submissions SET extracted_text = :text, ocr_confidence = :conf WHERE id = :id"),
+                        {"text": extracted_text, "conf": confidence, "id": submission_id}
+                    )
+                    db.commit()
+                finally:
+                    loop.close()
+
+            # Run evaluation synchronously
+            result = asyncio.new_event_loop().run_until_complete(
+                evaluator.evaluate_submission_with_ocr(db, submission_id)
+            )
+            
+            return jsonify({
+                "id": submission_id,
+                "status": "success",
+                "evaluation": result
+            })
+        except Exception as e:
+            logger.error(f"Evaluation error: {str(e)}")
+            return jsonify({"error": str(e)}), 500
+        finally:
+            db.close()
+    except Exception as e:
+        logger.error(f"Server error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
 if __name__ == "__main__":
     try:
         # Create database tables
@@ -192,7 +433,7 @@ if __name__ == "__main__":
         logger.info("Database tables created")
         
         # Run Flask app in production mode
-        port = 8000
+        port = 5000  # Changed to match frontend configuration
         logger.info(f"Starting Flask server in production mode on port {port}...")
         app.run(
             host="127.0.0.1",

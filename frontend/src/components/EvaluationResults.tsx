@@ -1,8 +1,19 @@
 import React from 'react';
-import { ArrowLeft, Download, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
 
 interface EvaluationResultsProps {
-  result: any;
+  result: {
+    id: number;
+    student_name: string;
+    evaluation: {
+      similarity_score: number;
+      marks_awarded: number;
+      max_marks: number;
+      detailed_scores: Record<string, number>;
+      ai_feedback: string;
+      evaluation_time: string;
+    };
+  };
   onBack: () => void;
 }
 
@@ -39,64 +50,79 @@ const EvaluationResults: React.FC<EvaluationResultsProps> = ({ result, onBack })
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* Test Information */}
             <div>
               <h3 className="font-medium text-gray-900 mb-2">Test Information</h3>
               <div className="space-y-1 text-sm text-gray-600">
-                <p><strong>Test:</strong> {result.testTitle}</p>
-                <p><strong>Subject:</strong> {result.subject}</p>
-                <p><strong>Student:</strong> {result.studentName}</p>
-                <p><strong>Date:</strong> {result.date}</p>
+                <p><strong>Student:</strong> {result.student_name}</p>
+                <p><strong>Date:</strong> {new Date(result.evaluation.evaluation_time).toLocaleDateString()}</p>
               </div>
             </div>
+
+            {/* Score Overview */}
             <div>
               <h3 className="font-medium text-gray-900 mb-2">Score Breakdown</h3>
               <div className="flex items-center space-x-4">
-                <div className="text-3xl font-bold text-indigo-600">{result.score}%</div>
+                <div className="text-3xl font-bold text-indigo-600">
+                  {Math.round((result.evaluation.marks_awarded / result.evaluation.max_marks) * 100)}%
+                </div>
                 <div className="flex-1">
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div 
                       className="bg-indigo-600 h-3 rounded-full transition-all duration-1000"
-                      style={{ width: `${result.score}%` }}
+                      style={{ width: `${Math.round((result.evaluation.marks_awarded / result.evaluation.max_marks) * 100)}%` }}
                     ></div>
+                  </div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    {result.evaluation.marks_awarded} / {result.evaluation.max_marks} points
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Detailed Feedback */}
+          {/* AI Feedback */}
           <div className="space-y-4">
-            <h3 className="font-medium text-gray-900">Detailed Feedback</h3>
-            
-            {/* Mock detailed evaluation results */}
+            <h3 className="font-medium text-gray-900">AI Feedback</h3>
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <pre className="whitespace-pre-wrap text-sm text-gray-700">
+                {result.evaluation.ai_feedback}
+              </pre>
+            </div>
+
+            {/* Detailed Scores */}
+            <h3 className="font-medium text-gray-900 mt-6">Score Analysis</h3>
             <div className="space-y-3">
-              <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg">
-                <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                <div>
-                  <p className="font-medium text-green-900">Strengths</p>
-                  <p className="text-sm text-green-700">
-                    Good understanding of core concepts. Clear explanations provided.
-                  </p>
+              {Object.entries(result.evaluation.detailed_scores).map(([criterion, score]) => (
+                <div key={criterion} className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-gray-200">
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900">{criterion}</p>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                      <div 
+                        className="bg-indigo-600 h-2 rounded-full transition-all duration-1000"
+                        style={{ width: `${score * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                  <div className="text-sm font-medium text-gray-600">
+                    {Math.round(score * 100)}%
+                  </div>
                 </div>
-              </div>
-              
-              <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
-                <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                <div>
-                  <p className="font-medium text-yellow-900">Areas for Improvement</p>
-                  <p className="text-sm text-yellow-700">
-                    Some minor gaps in mathematical calculations. Consider showing more detailed steps.
-                  </p>
+              ))}
+
+              {/* Similarity Score */}
+              <div className="flex items-start space-x-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="flex-1">
+                  <p className="font-medium text-gray-900">Overall Similarity</p>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div 
+                      className="bg-green-500 h-2 rounded-full transition-all duration-1000"
+                      style={{ width: `${result.evaluation.similarity_score * 100}%` }}
+                    />
+                  </div>
                 </div>
-              </div>
-              
-              <div className="flex items-start space-x-3 p-3 bg-red-50 rounded-lg">
-                <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
-                <div>
-                  <p className="font-medium text-red-900">Missing Elements</p>
-                  <p className="text-sm text-red-700">
-                    Final conclusion could be more comprehensive.
-                  </p>
+                <div className="text-sm font-medium text-gray-600">
+                  {Math.round(result.evaluation.similarity_score * 100)}%
                 </div>
               </div>
             </div>

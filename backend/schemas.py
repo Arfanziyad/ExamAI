@@ -30,6 +30,20 @@ class OCRResult(BaseModel):
     validation_result: Optional[OCRValidationResult]
     error: Optional[OCRErrorDetails]
 
+# Auto-evaluation and evaluation response schema
+class AutoEvaluationResult(BaseModel):
+    similarity_score: float
+    marks_awarded: int
+    max_marks: int
+    detailed_scores: Dict[str, Any]
+    ai_feedback: str
+    subject_area: str = "general"
+    evaluation_time: float
+    original_marks_out_of_10: int
+    
+    class Config:
+        from_attributes = True
+
 class QuestionPaperResponse(BaseModel):
     id: int
     title: str
@@ -106,9 +120,11 @@ class EvaluationResponse(BaseModel):
     max_marks: int
     detailed_scores: Dict[str, Any]
     ai_feedback: str
+    subject_area: str = "general"
+    original_marks_out_of_10: int
     manual_marks: Optional[int]
     manual_feedback: Optional[str]
-    is_manually_overridden: bool
+    is_manually_overridden: bool = False
     evaluation_time: float
     created_at: datetime
     

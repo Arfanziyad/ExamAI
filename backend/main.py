@@ -31,8 +31,9 @@ from models import QuestionPaper, Question, AnswerScheme, Submission, Evaluation
 from schemas import (
     QuestionPaperCreate, QuestionPaperResponse, QuestionCreate, QuestionResponse,
     AnswerSchemeCreate, AnswerSchemeResponse, SubmissionCreate, SubmissionResponse,
-    EvaluationResponse, ManualEvaluationUpdate, QuestionPaperWithQuestions,
-    PerformanceAnalytics, StudentPerformance, OCRVerificationRequest, OCRResult
+    EvaluationResponse, AutoEvaluationResult, ManualEvaluationUpdate, 
+    QuestionPaperWithQuestions, PerformanceAnalytics, StudentPerformance, 
+    OCRVerificationRequest, OCRResult
 )
 from services.file_service import FileService
 from services.ocr_service import OCRService
@@ -88,6 +89,68 @@ except Exception as e:
 @app.get("/")
 async def root():
     return {"message": "AI Subjective Answer Evaluator API", "status": "running"}
+
+@app.post("/api/submissions/{submission_id}/auto-evaluate", response_model=AutoEvaluationResult)
+async def auto_evaluate_submission(
+    submission_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Automatically evaluate a submission using OCR text and model answers.
+    This is used for immediate evaluation after submission.
+    """
+    try:
+        # Get the submission
+        submission = db.query(Submission).filter(Submission.id == submission_id).first()
+        if not submission:
+            raise HTTPException(status_code=404, detail="Submission not found")
+
+        # Evaluate the submission
+        evaluation_result = await evaluator_service.evaluate_submission_with_ocr(db, submission_id)
+        
+        # Convert dict to EvaluationResponse
+        evaluation = Evaluation(
+            submission_id=submission_id,
+            similarity_score=evaluation_result['similarity_score'],
+            marks_awarded=evaluation_result['marks_awarded'],
+            max_marks=evaluation_result['max_marks'],
+            detailed_scores=evaluation_result['detailed_scores'],
+            ai_feedback=evaluation_result['ai_feedback'],
+            evaluation_time=evaluation_result['evaluation_time'],
+        )
+        
+        return evaluation
+    except Exception as e:
+        logger.error(f"Error during auto-evaluation: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/submissions/{submission_id}/manual-evaluate", response_model=EvaluationResponse)
+async def evaluate_submission_manual(
+    submission_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Manually trigger evaluation of a submission against its model answer.
+    This is used for re-evaluation or when auto-evaluation fails.
+    """
+    try:
+        # Get the submission
+        submission = db.query(Submission).filter(Submission.id == submission_id).first()
+        if not submission:
+            raise HTTPException(status_code=404, detail="Submission not found")
+
+        # Evaluate the submission
+        evaluation_result = await evaluator_service.evaluate_submission(db, submission_id)
+        
+        # Get the evaluation from the database
+        evaluation = db.query(Evaluation).filter(Evaluation.submission_id == submission_id).first()
+        if not evaluation:
+            raise HTTPException(status_code=404, detail="Evaluation not found")
+            
+        return evaluation
+    except Exception as e:
+        logger.error(f"Error during manual evaluation: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ==================== QUESTION PAPER ENDPOINTS ====================
 
@@ -364,6 +427,23 @@ async def submit_answer(
             db.commit()
             
             logger.info(f"OCR completed for submission {submission.id}")
+            
+            # Automatically evaluate after successful OCR
+            try:
+                evaluation_result = await evaluator_service.evaluate_submission_with_ocr(
+                    db=db, 
+                    submission_id=submission.id if isinstance(submission.id, int) else submission.id.scalar()
+                )
+                logger.info(f"Auto-evaluation completed for submission {submission.id}")
+                
+                # Update the submission response to include evaluation
+                submission_dict = submission.__dict__.copy()
+                submission_dict['evaluation'] = evaluation_result
+                return submission_dict
+            except Exception as eval_err:
+                logger.error(f"Auto-evaluation failed for submission {submission.id}: {str(eval_err)}")
+                return submission
+                
         except Exception as e:
             logger.error(f"OCR failed for submission {submission.id}: {str(e)}")
         
