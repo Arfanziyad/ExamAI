@@ -13,18 +13,21 @@ export async function uploadQuestions(
   subject = 'general',
   description = ''
 ): Promise<{
-  id: string;
+  id: number;
+  question_id: number;
 }> {
-  const formData = new FormData();
-  formData.append('question_text', questionText);
-  formData.append('answer_text', answerText);
-  formData.append('title', title);
-  formData.append('subject', subject);
-  if (description) formData.append('description', description);
-
   const response = await fetch(`${API_BASE_URL}/api/question-papers`, {
     method: 'POST',
-    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      question_text: questionText,
+      answer_text: answerText,
+      title,
+      subject,
+      description,
+    }),
   });
 
   if (!response.ok) {
@@ -33,11 +36,11 @@ export async function uploadQuestions(
   }
 
   const result = await response.json();
-  return { id: result.id };
+  return { id: result.id, question_id: result.question_id };
 }
 
 export async function verifyOCRText(
-  paperId: string,
+  paperId: number,
   type: 'question' | 'model_answer',
   correctedText: string
 ): Promise<void> {

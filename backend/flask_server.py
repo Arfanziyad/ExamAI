@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from database import get_db, create_tables
-from models import QuestionPaper
+from models import QuestionPaper, Question, AnswerScheme
 import logging
 
 # Configure logging
@@ -85,6 +85,36 @@ def create_question_paper():
             db.commit()
             db.refresh(question_paper)
 
+            # Automatically create a Question record for this QuestionPaper
+            try:
+                question = Question(
+                    question_paper_id=question_paper.id,
+                    question_text=question_text,
+                    question_number=1,
+                    max_marks=10,  # Default max marks
+                    subject_area=subject.lower() if subject else 'general'
+                )
+                db.add(question)
+                db.commit()
+                db.refresh(question)
+                
+                # Create an AnswerScheme for the question
+                answer_scheme = AnswerScheme(
+                    question_id=question.id,
+                    model_answer=answer_text,
+                    key_points=[],  # Can be populated later
+                    marking_criteria={},  # Can be populated later
+                    sample_answers=[]  # Can be populated later
+                )
+                db.add(answer_scheme)
+                db.commit()
+                
+                logger.info(f"Created QuestionPaper {question_paper.id}, Question {question.id}, and AnswerScheme {answer_scheme.id}")
+                question_id = question.id
+            except Exception as q_error:
+                logger.error(f"Failed to create Question/AnswerScheme: {str(q_error)}")
+                question_id = None
+
             # Convert to dict for JSON response
             created_at = None
             if hasattr(question_paper, 'created_at'):
@@ -94,6 +124,7 @@ def create_question_paper():
 
             response = {
                 "id": question_paper.id,
+                "question_id": question_id,  # Include the question ID for frontend use
                 "title": question_paper.title,
                 "subject": question_paper.subject,
                 "description": question_paper.description,
@@ -103,6 +134,56 @@ def create_question_paper():
             }
             
             return jsonify(response), 201
+
+        except Exception as e:
+            db.rollback()
+            logger.error(f"Database error: {str(e)}")
+            return jsonify({"error": "Database error occurred"}), 500
+        finally:
+            db.close()
+
+    except Exception as e:
+        logger.error(f"Server error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/question-papers/<int:paper_id>/ocr-verify", methods=["PUT"])
+def verify_ocr_text(paper_id):
+    try:
+        # Get JSON data
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+        
+        ocr_type = data.get('type')  # 'question' or 'model_answer'
+        corrected_text = data.get('corrected_text', '').strip()
+        
+        if not ocr_type or ocr_type not in ['question', 'model_answer']:
+            return jsonify({"error": "Invalid type. Must be 'question' or 'model_answer'"}), 400
+        
+        if not corrected_text:
+            return jsonify({"error": "Missing corrected_text"}), 400
+        
+        # Get database session
+        db = next(get_db())
+        try:
+            # Find existing question paper
+            paper = db.query(QuestionPaper).filter(QuestionPaper.id == paper_id).first()
+            if not paper:
+                return jsonify({"error": "Question paper not found"}), 404
+            
+            # Update the appropriate field based on type
+            if ocr_type == 'question':
+                paper.question_text = corrected_text
+                logger.info(f"Updated question text for paper {paper_id}")
+            elif ocr_type == 'model_answer':
+                paper.answer_text = corrected_text
+                logger.info(f"Updated answer text for paper {paper_id}")
+            
+            # Save changes
+            db.commit()
+            db.refresh(paper)
+            
+            return jsonify({"message": "OCR text verified and updated successfully"}), 200
 
         except Exception as e:
             db.rollback()
