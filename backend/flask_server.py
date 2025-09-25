@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from database import get_db, create_tables
-from models import QuestionPaper, Question, AnswerScheme
+from models import QuestionPaper, Question, AnswerScheme, Submission, Evaluation
 import logging
 
 # Configure logging
@@ -25,8 +25,14 @@ def get_question_papers():
             result = []
             for paper in papers:
                 created_at = paper.created_at.isoformat() if hasattr(paper, 'created_at') and paper.created_at is not None else None
+                
+                # Get the associated Question ID
+                question = db.query(Question).filter(Question.question_paper_id == paper.id).first()
+                question_id = question.id if question else None
+                
                 result.append({
                     "id": paper.id,
+                    "question_id": question_id,  # Include the actual question ID for submissions
                     "title": paper.title,
                     "subject": paper.subject,
                     "description": paper.description,
@@ -231,7 +237,7 @@ def create_submission(question_id):
         # Save submission to database
         db = next(get_db())
         try:
-            from models import Submission, Question, AnswerScheme
+
             
             # Verify question exists
             question = db.query(Question).filter(Question.id == question_id).first()
@@ -342,7 +348,7 @@ def get_evaluation_results(submission_id):
     try:
         db = next(get_db())
         try:
-            from models import Evaluation, Submission
+
             
             # Get evaluation for the submission
             evaluation = db.query(Evaluation).filter(Evaluation.submission_id == submission_id).first()
@@ -392,7 +398,7 @@ def get_all_submissions():
     try:
         db = next(get_db())
         try:
-            from models import Submission, Evaluation
+
             
             # Get all submissions with their evaluations
             submissions = db.query(Submission).all()
@@ -447,8 +453,69 @@ def get_all_submissions():
         logger.error(f"Server error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
+@app.route("/api/submissions/<int:submission_id>/retry-ocr", methods=["POST"])
+def retry_ocr_processing(submission_id):
+    """Retry OCR processing for a specific submission"""
+    try:
+        db = next(get_db())
+        try:
+            from sqlalchemy import text
+            from services.ocr_service import OCRService
+            
+            # Get submission
+            submission = db.query(Submission).filter(Submission.id == submission_id).first()
+            if not submission:
+                return jsonify({"error": "Submission not found"}), 404
+            
+            handwriting_path = getattr(submission, 'handwriting_image_path', None)
+            if not handwriting_path:
+                return jsonify({"error": "No handwriting image found for this submission"}), 400
+            
+            # Run OCR processing
+            ocr_service = OCRService()
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            try:
+                logger.info(f"Starting OCR retry for submission {submission_id}")
+                extracted_text, confidence = loop.run_until_complete(
+                    ocr_service.extract_text_from_image(handwriting_path)
+                )
+                
+                # Update submission with OCR results
+                db.execute(
+                    text("UPDATE submissions SET extracted_text = :text, ocr_confidence = :conf WHERE id = :id"),
+                    {"text": extracted_text, "conf": confidence, "id": submission_id}
+                )
+                db.commit()
+                logger.info(f"OCR retry completed for submission {submission_id}")
+                
+                return jsonify({
+                    "message": "OCR processing completed successfully",
+                    "extracted_text": extracted_text,
+                    "ocr_confidence": confidence
+                }), 200
+                
+            except Exception as ocr_error:
+                logger.error(f"OCR retry error: {str(ocr_error)}")
+                return jsonify({"error": f"OCR processing failed: {str(ocr_error)}"}), 500
+            finally:
+                loop.close()
+                
+        except Exception as e:
+            logger.error(f"Database error in retry OCR: {str(e)}")
+            return jsonify({"error": "Database error occurred"}), 500
+        finally:
+            db.close()
+            
+    except Exception as e:
+        logger.error(f"Server error in retry OCR: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
 @app.route("/api/submissions/<int:submission_id>/evaluate", methods=["POST"])
 def evaluate_submission(submission_id):
+    import asyncio  # Import at the beginning of the function
     try:
         db = next(get_db())
         try:
@@ -458,7 +525,6 @@ def evaluate_submission(submission_id):
             ocr = OCRService()
             
             # Get submission and question details
-            from models import Submission, Question, QuestionPaper, Evaluation
             from sqlalchemy import text
             
             # Get submission with explicit column access
@@ -472,7 +538,6 @@ def evaluate_submission(submission_id):
             
             if not extracted_text and handwriting_path:
                 # Run OCR synchronously
-                import asyncio
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
                 try:
@@ -505,6 +570,95 @@ def evaluate_submission(submission_id):
             db.close()
     except Exception as e:
         logger.error(f"Server error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/debug/submission/<int:submission_id>", methods=["GET"])
+def debug_submission(submission_id):
+    """Debug endpoint to check submission data in database"""
+    try:
+        db = next(get_db())
+        try:
+            submission = db.query(Submission).filter(Submission.id == submission_id).first()
+            if not submission:
+                return jsonify({"error": "Submission not found"}), 404
+            
+            return jsonify({
+                "id": submission.id,
+                "question_id": submission.question_id,
+                "student_name": submission.student_name,
+                "handwriting_image_path": submission.handwriting_image_path,
+                "extracted_text": getattr(submission, 'extracted_text', 'NOT_SET'),
+                "extracted_text_type": str(type(getattr(submission, 'extracted_text', None))),
+                "extracted_text_length": len(getattr(submission, 'extracted_text', '') or ''),
+                "ocr_confidence": getattr(submission, 'ocr_confidence', 'NOT_SET'),
+                "submitted_at": submission.submitted_at.isoformat() if hasattr(submission, 'submitted_at') and submission.submitted_at is not None else None,
+                "has_extracted_text_attr": hasattr(submission, 'extracted_text'),
+                "raw_extracted_text": repr(getattr(submission, 'extracted_text', None))
+            })
+        finally:
+            db.close()
+    except Exception as e:
+        logger.error(f"Debug endpoint error: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/test-ocr", methods=["POST"])
+def test_ocr_service():
+    """Test endpoint to verify OCR service is working"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({"error": "No file provided"}), 400
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+        
+        # Save test file temporarily
+        import tempfile
+        import os
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as temp_file:
+            file.save(temp_file.name)
+            temp_path = temp_file.name
+        
+        try:
+            from services.ocr_service import OCRService
+            ocr_service = OCRService()
+            
+            # Run OCR test
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            try:
+                logger.info(f"Testing OCR with file: {file.filename}")
+                extracted_text, confidence = loop.run_until_complete(
+                    ocr_service.extract_text_from_image(temp_path)
+                )
+                logger.info(f"OCR test result: '{extracted_text}' (confidence: {confidence})")
+                
+                return jsonify({
+                    "success": True,
+                    "extracted_text": extracted_text,
+                    "confidence": confidence,
+                    "text_length": len(extracted_text) if extracted_text else 0,
+                    "is_empty": extracted_text == "" if extracted_text is not None else True
+                })
+            finally:
+                loop.close()
+                
+        except Exception as ocr_error:
+            logger.error(f"OCR test failed: {str(ocr_error)}")
+            return jsonify({
+                "success": False,
+                "error": str(ocr_error),
+                "error_type": type(ocr_error).__name__
+            }), 500
+        finally:
+            # Clean up temp file
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+            
+    except Exception as e:
+        logger.error(f"Test OCR endpoint error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
 if __name__ == "__main__":

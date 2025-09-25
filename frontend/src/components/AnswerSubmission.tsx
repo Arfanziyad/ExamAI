@@ -4,7 +4,7 @@ import Loading from './Loading';
 import { submitAnswer } from '../services/api';
 
 interface AnswerSubmissionProps {
-  questionId: string;
+  questionId: number; // Change from string to number to match backend
   onSubmissionComplete: () => void;
 }
 
@@ -26,7 +26,7 @@ const AnswerSubmission: React.FC<AnswerSubmissionProps> = ({ questionId, onSubmi
       const formData = new FormData();
       formData.append('file', file);
       formData.append('student_name', studentName);
-      formData.append('question_id', questionId);
+      formData.append('question_id', questionId.toString()); // Convert number to string
 
       await submitAnswer(formData); // single argument
       onSubmissionComplete();

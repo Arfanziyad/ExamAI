@@ -4,7 +4,8 @@ import Loading from '../components/Loading';
 import { getTests, submitAnswer } from '../services/api';
 
 type Test = {
-  id: string;
+  id: number;
+  question_id: number;
   title: string;
   subject: string;
 };
@@ -22,9 +23,11 @@ const TakeTest: React.FC = () => {
     const fetchTests = async () => {
       try {
         const testsData: Test[] = await getTests();
+        console.log('Loaded tests:', testsData); // Debug log
         setTests(testsData);
       } catch (error) {
         console.error('Error fetching tests:', error);
+        alert('Failed to load tests. Please refresh the page.');
       }
     };
     fetchTests();
@@ -38,13 +41,23 @@ const TakeTest: React.FC = () => {
       return;
     }
 
+    // Find the selected test to get the question_id
+    const test = tests.find(t => t.id.toString() === selectedTest);
+    if (!test || !test.question_id) {
+      alert('Invalid test selected. Please refresh and try again.');
+      return;
+    }
+
+    console.log('Selected test:', test); // Debug log
+    console.log('Using question_id:', test.question_id); // Debug log
+
     setLoading(true);
     try {
       // Build FormData as required by the API
       const formData = new FormData();
       formData.append('file', answerFile);
       formData.append('student_name', studentName);
-      formData.append('question_id', selectedTest);
+      formData.append('question_id', test.question_id.toString()); // Use the actual question_id
 
       const result = await submitAnswer(formData);
       

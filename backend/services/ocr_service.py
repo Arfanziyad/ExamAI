@@ -10,8 +10,9 @@ load_dotenv()
 
 class OCRService:
     def __init__(self):
-        self.api_key = os.getenv('OCR_API_KEY', '1153|7o2K4RXz4cR4i4aclY0RQFj9JiC7qy650U9DgEqKfd6cd682')
-        self.base_url = 'https://www.handwritingocr.com/api/v3'
+        self.api_key = os.getenv('OCR_API_KEY', '1211|sgU0oiboVJix9EbapjudC8xv23uSAhqtUM58CXma2e7d1c6f')
+        # Use environment variable for base URL, fallback to v3 endpoint
+        self.base_url = os.getenv('OCR_API_URL', 'https://www.handwritingocr.com/api/v3')
         self.headers = {
             'Authorization': f'Bearer {self.api_key}',
             'Accept': 'application/json'
@@ -96,6 +97,13 @@ class OCRService:
                     data=data
                 ) as response:
                     response_text = await response.text()
+                    
+                    # Debug logging
+                    print(f"OCR Upload Debug:")
+                    print(f"  URL: {self.base_url}/documents")
+                    print(f"  Status: {response.status}")
+                    print(f"  Headers sent: {self.headers}")
+                    print(f"  Response: {response_text[:200]}...")
                     
                     if response.status == 201:
                         result = await response.json()
