@@ -152,6 +152,133 @@ def create_question_paper():
         logger.error(f"Server error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
+@app.route("/api/question-papers/multiple", methods=["POST"])
+def create_question_paper_multiple():
+    """Create a question paper with multiple questions and answers"""
+    try:
+        # Get JSON data
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+        
+        # Get and validate basic fields
+        title = str(data.get("title", "")).strip()
+        subject = str(data.get("subject", "")).strip()
+        description = str(data.get("description", "")).strip()
+        questions_data = data.get("questions", [])
+
+        # Check required fields
+        if not title:
+            return jsonify({"error": "Title is required"}), 400
+        if not subject:
+            return jsonify({"error": "Subject is required"}), 400
+        if not questions_data or len(questions_data) == 0:
+            return jsonify({"error": "At least one question is required"}), 400
+
+        # Validate questions
+        for i, q_data in enumerate(questions_data):
+            if not q_data.get("question_text", "").strip():
+                return jsonify({"error": f"Question text is required for question {i+1}"}), 400
+            if not q_data.get("answer_text", "").strip():
+                return jsonify({"error": f"Answer text is required for question {i+1}"}), 400
+
+        # Get database session
+        db = next(get_db())
+        try:
+            # Create question paper
+            # For backward compatibility, combine all questions into question_text and answer_text
+            combined_question_text = "\n\n".join([
+                f"Question {i+1}: {q['question_text']}" 
+                for i, q in enumerate(questions_data)
+            ])
+            combined_answer_text = "\n\n".join([
+                f"Answer {i+1}: {q['answer_text']}" 
+                for i, q in enumerate(questions_data)
+            ])
+            
+            question_paper = QuestionPaper(
+                title=title,
+                subject=subject,
+                description=description,
+                question_text=combined_question_text,
+                answer_text=combined_answer_text
+            )
+            
+            # Save to database
+            db.add(question_paper)
+            db.commit()
+            db.refresh(question_paper)
+
+            # Create individual Question and AnswerScheme records
+            created_questions = []
+            for i, q_data in enumerate(questions_data):
+                try:
+                    question = Question(
+                        question_paper_id=question_paper.id,
+                        question_text=q_data["question_text"].strip(),
+                        question_number=q_data.get("question_number", i + 1),
+                        max_marks=q_data.get("max_marks", 10),
+                        subject_area=subject.lower() if subject else 'general'
+                    )
+                    db.add(question)
+                    db.commit()
+                    db.refresh(question)
+                    
+                    # Create an AnswerScheme for the question
+                    answer_scheme = AnswerScheme(
+                        question_id=question.id,
+                        model_answer=q_data["answer_text"].strip(),
+                        key_points=[],  # Can be populated later
+                        marking_criteria={},  # Can be populated later
+                        sample_answers=[]  # Can be populated later
+                    )
+                    db.add(answer_scheme)
+                    db.commit()
+                    
+                    created_questions.append({
+                        "question_id": question.id,
+                        "question_number": question.question_number,
+                        "max_marks": question.max_marks
+                    })
+                    
+                    logger.info(f"Created Question {question.id} and AnswerScheme for QuestionPaper {question_paper.id}")
+                    
+                except Exception as q_error:
+                    logger.error(f"Failed to create Question {i+1}: {str(q_error)}")
+                    # Continue with other questions even if one fails
+                    continue
+
+            # Convert to dict for JSON response
+            created_at = None
+            if hasattr(question_paper, 'created_at'):
+                dt = question_paper.created_at
+                if dt is not None:
+                    created_at = dt.isoformat()
+
+            response_data = {
+                "id": question_paper.id,
+                "message": "Question paper created successfully",
+                "title": question_paper.title,
+                "subject": question_paper.subject,
+                "description": question_paper.description,
+                "questions_count": len(created_questions),
+                "questions": created_questions,
+                "created_at": created_at
+            }
+            
+            return jsonify(response_data), 201
+
+        except Exception as e:
+            db.rollback()
+            logger.error(f"Database error: {str(e)}")
+            return jsonify({"error": "Failed to create question paper"}), 500
+        finally:
+            db.close()
+
+    except Exception as e:
+        logger.error(f"Server error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
 @app.route("/api/question-papers/<int:paper_id>/ocr-verify", methods=["PUT"])
 def verify_ocr_text(paper_id):
     try:
@@ -660,6 +787,213 @@ def test_ocr_service():
     except Exception as e:
         logger.error(f"Test OCR endpoint error: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/ocr/process-question-paper", methods=["POST"])
+def process_question_paper_ocr():
+    """Process uploaded question paper image and extract questions and answers"""
+    try:
+        if 'image' not in request.files:
+            return jsonify({"error": "No image provided"}), 400
+        
+        file = request.files['image']
+        if not file.filename or file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+        
+        # Validate file type
+        allowed_extensions = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
+        if '.' not in file.filename:
+            return jsonify({"error": "Invalid file type. Please upload an image file with a valid extension."}), 400
+        
+        file_extension = file.filename.rsplit('.', 1)[1].lower()
+        if file_extension not in allowed_extensions:
+            return jsonify({"error": "Invalid file type. Please upload an image file."}), 400
+        
+        # Save file temporarily
+        import tempfile
+        import os
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.jpg') as temp_file:
+            file.save(temp_file.name)
+            temp_path = temp_file.name
+        
+        try:
+            from services.ocr_service import OCRService
+            ocr_service = OCRService()
+            
+            # Run OCR
+            import asyncio
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            try:
+                logger.info(f"Processing question paper OCR for file: {file.filename}")
+                extracted_text, confidence = loop.run_until_complete(
+                    ocr_service.extract_text_from_image(temp_path)
+                )
+                logger.info(f"OCR extraction complete. Text length: {len(extracted_text) if extracted_text else 0}")
+                
+                if not extracted_text or extracted_text.strip() == "":
+                    return jsonify({
+                        "error": "No text could be extracted from the image. Please ensure the image is clear and contains readable text."
+                    }), 400
+                
+                # Process the extracted text to separate questions and answers
+                question_text, answer_text = classify_question_paper_text(extracted_text)
+                
+                return jsonify({
+                    "success": True,
+                    "question_text": question_text,
+                    "answer_text": answer_text,
+                    "confidence": confidence,
+                    "raw_text": extracted_text,
+                    "text_length": len(extracted_text)
+                })
+                
+            finally:
+                loop.close()
+                
+        except Exception as ocr_error:
+            logger.error(f"Question paper OCR failed: {str(ocr_error)}")
+            return jsonify({
+                "error": f"OCR processing failed: {str(ocr_error)}",
+                "error_type": type(ocr_error).__name__
+            }), 500
+        finally:
+            # Clean up temp file
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+            
+    except Exception as e:
+        logger.error(f"Question paper OCR endpoint error: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+def classify_question_paper_text(text: str) -> tuple[str, str]:
+    """
+    Classify extracted text into questions and model answers
+    Enhanced to better handle multiple questions and answers
+    """
+    lines = text.strip().split('\n')
+    lines = [line.strip() for line in lines if line.strip()]
+    
+    if not lines:
+        return "", ""
+    
+    # Keywords that typically indicate question sections
+    question_keywords = [
+        'question', 'q.', 'q:', 'problem', 'solve', 'find', 'calculate', 
+        'determine', 'explain', 'describe', 'what', 'how', 'why', 'which', 
+        'where', 'when', 'name', 'list', 'define', 'compare', 'analyze'
+    ]
+    
+    # Keywords that typically indicate answer sections  
+    answer_keywords = [
+        'answer', 'ans.', 'ans:', 'solution', 'model answer', 'key', 
+        'marking scheme', 'rubric', 'response', 'solution:', 'answer:'
+    ]
+    
+    # Look for numbered patterns (1., 2., 3., etc.)
+    import re
+    numbered_question_pattern = r'^(\d+)[\.\)]\s*'
+    numbered_answer_pattern = r'^(\d+)[\.\)]\s*'
+    
+    # Separate questions and answers
+    questions = []
+    answers = []
+    current_section = None
+    current_question_num = None
+    current_content = []
+    
+    for line in lines:
+        line_lower = line.lower()
+        
+        # Check for numbered patterns
+        q_match = re.match(numbered_question_pattern, line)
+        a_match = re.match(numbered_answer_pattern, line)
+        
+        # Check if this line indicates a section change
+        is_question_line = any(keyword in line_lower for keyword in question_keywords)
+        is_answer_line = any(keyword in line_lower for keyword in answer_keywords)
+        
+        # Detect section headers
+        if ('answer' in line_lower and len(line.split()) <= 5) or 'model answer' in line_lower:
+            # Save previous content
+            if current_section == 'question' and current_content:
+                questions.append('\n'.join(current_content))
+                current_content = []
+            current_section = 'answer'
+            current_question_num = None
+            continue
+        elif ('question' in line_lower and len(line.split()) <= 5) or line_lower.strip() in ['questions', 'q', 'problems']:
+            # Save previous content
+            if current_section == 'answer' and current_content:
+                answers.append('\n'.join(current_content))
+                current_content = []
+            current_section = 'question'
+            current_question_num = None
+            continue
+        
+        # Handle numbered items
+        if q_match:
+            # Save previous content
+            if current_content:
+                if current_section == 'question':
+                    questions.append('\n'.join(current_content))
+                elif current_section == 'answer':
+                    answers.append('\n'.join(current_content))
+            
+            current_question_num = int(q_match.group(1))
+            current_section = 'question'
+            current_content = [line]
+            continue
+        elif a_match and current_section != 'question':
+            # Save previous content
+            if current_content and current_section == 'answer':
+                answers.append('\n'.join(current_content))
+            
+            current_question_num = int(a_match.group(1))
+            current_section = 'answer'
+            current_content = [line]
+            continue
+            
+        # If we haven't determined a section yet, try to classify based on content
+        if current_section is None:
+            if is_question_line and not is_answer_line:
+                current_section = 'question'
+            elif is_answer_line and not is_question_line:
+                current_section = 'answer'
+            else:
+                # Default to question for the first part
+                current_section = 'question'
+        
+        # Add line to current content
+        current_content.append(line)
+    
+    # Save remaining content
+    if current_content:
+        if current_section == 'question':
+            questions.append('\n'.join(current_content))
+        elif current_section == 'answer':
+            answers.append('\n'.join(current_content))
+    
+    # If we couldn't classify anything, split roughly in half
+    if not questions and not answers:
+        mid_point = len(lines) // 2
+        questions = ['\n'.join(lines[:mid_point])]
+        answers = ['\n'.join(lines[mid_point:])]
+    
+    # If only one section was found, try to split it
+    elif not questions or not answers:
+        all_content = questions + answers
+        if len(all_content) == 1:
+            content_lines = all_content[0].split('\n')
+            mid_point = len(content_lines) // 2
+            questions = ['\n'.join(content_lines[:mid_point])]
+            answers = ['\n'.join(content_lines[mid_point:])]
+    
+    # Join all questions and answers
+    question_text = '\n\n'.join(questions).strip()
+    answer_text = '\n\n'.join(answers).strip()
+    
+    return question_text, answer_text
 
 if __name__ == "__main__":
     try:

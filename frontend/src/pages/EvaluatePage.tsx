@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings, FileText, User, ChevronDown, Award, AlertCircle, CheckCircle2, Clock } from 'lucide-react';
+import { Settings, FileText, User, ChevronDown, Award, AlertCircle, CheckCircle2, Clock, Loader2 } from 'lucide-react';
 import { getTests, getAllEvaluationResults } from '../services/api';
 import type { QuestionPaper, SubmissionData } from '../types';
 
@@ -16,6 +16,7 @@ const EvaluatePage = () => {
   const [loading, setLoading] = useState(false);
   const [evaluating, setEvaluating] = useState(false);
   const [evaluatingSubmissions, setEvaluatingSubmissions] = useState<Set<number>>(new Set());
+  const [ocrProcessingSubmissions, setOcrProcessingSubmissions] = useState<Set<number>>(new Set());
   const [error, setError] = useState<string | null>(null);
 
   // Load available tests on component mount
@@ -90,6 +91,7 @@ const EvaluatePage = () => {
   };
 
   const retryOcrForSubmission = async (submissionId: number) => {
+    setOcrProcessingSubmissions(prev => new Set(prev).add(submissionId));
     try {
       const response = await fetch(`http://localhost:5000/api/submissions/${submissionId}/retry-ocr`, {
         method: 'POST',
@@ -111,6 +113,12 @@ const EvaluatePage = () => {
     } catch (error) {
       console.error('Error retrying OCR:', error);
       setError(`OCR retry failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setOcrProcessingSubmissions(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(submissionId);
+        return newSet;
+      });
     }
   };
 
@@ -397,9 +405,17 @@ const EvaluatePage = () => {
                             </p>
                             <button
                               onClick={() => retryOcrForSubmission(submission.id)}
-                              className="mt-2 px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors"
+                              disabled={ocrProcessingSubmissions.has(submission.id)}
+                              className="mt-2 px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                             >
-                              🔄 Retry OCR
+                              {ocrProcessingSubmissions.has(submission.id) ? (
+                                <>
+                                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                                  Processing OCR...
+                                </>
+                              ) : (
+                                <>🔄 Retry OCR</>
+                              )}
                             </button>
                           </div>
                         </div>
@@ -456,10 +472,13 @@ const EvaluatePage = () => {
                             <button
                               onClick={() => evaluateSubmission(submission.id)}
                               disabled={evaluatingSubmissions.has(submission.id)}
-                              className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
                             >
                               {evaluatingSubmissions.has(submission.id) ? (
-                                <>⏳ Re-evaluating...</>
+                                <>
+                                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                                  Re-evaluating...
+                                </>
                               ) : (
                                 <>🔄 Re-evaluate</>
                               )}
@@ -476,10 +495,13 @@ const EvaluatePage = () => {
                           <button
                             onClick={() => evaluateSubmission(submission.id)}
                             disabled={evaluatingSubmissions.has(submission.id)}
-                            className="mt-3 px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="mt-3 px-4 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                           >
                             {evaluatingSubmissions.has(submission.id) ? (
-                              <>⏳ Evaluating...</>
+                              <>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                Evaluating...
+                              </>
                             ) : (
                               <>📊 Start Evaluation</>
                             )}
