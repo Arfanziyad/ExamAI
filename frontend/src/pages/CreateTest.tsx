@@ -7,6 +7,7 @@ interface QuestionAnswerPair {
   question: string;
   answer: string;
   marks: number;
+  question_type: string;  // "subjective" or "coding-python"
 }
 
 const CreateTest = () => {
@@ -14,7 +15,7 @@ const CreateTest = () => {
   const [testSubject, setTestSubject] = useState('');
   const [testDescription, setTestDescription] = useState('');
   const [questionAnswerPairs, setQuestionAnswerPairs] = useState<QuestionAnswerPair[]>([
-    { id: '1', question: '', answer: '', marks: 10 }
+    { id: '1', question: '', answer: '', marks: 10, question_type: 'subjective' }
   ]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -57,7 +58,8 @@ const CreateTest = () => {
           question_text: pair.question,
           answer_text: pair.answer,
           question_number: index + 1,
-          max_marks: pair.marks
+          max_marks: pair.marks,
+          question_type: pair.question_type
         }))
       };
 
@@ -91,7 +93,8 @@ const CreateTest = () => {
       id: newId, 
       question: '', 
       answer: '', 
-      marks: 10 
+      marks: 10,
+      question_type: 'subjective'
     }]);
   };
 
@@ -180,7 +183,8 @@ const CreateTest = () => {
           id: (i + 1).toString(),
           question: question.trim(),
           answer: answer.trim(),
-          marks: 10
+          marks: 10,
+          question_type: 'subjective'
         });
       }
     }
@@ -191,7 +195,8 @@ const CreateTest = () => {
         id: '1',
         question: questionText.trim(),
         answer: answerText.trim(),
-        marks: 10
+        marks: 10,
+        question_type: 'subjective'
       });
     }
     
@@ -211,7 +216,7 @@ const CreateTest = () => {
     setTestTitle('');
     setTestSubject('');
     setTestDescription('');
-    setQuestionAnswerPairs([{ id: '1', question: '', answer: '', marks: 10 }]);
+    setQuestionAnswerPairs([{ id: '1', question: '', answer: '', marks: 10, question_type: 'subjective' }]);
     setSuccess(false);
     setError('');
     clearOCR();
@@ -401,10 +406,17 @@ const CreateTest = () => {
         {showManualEntry && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                <Edit3 className="h-5 w-5 mr-2 text-indigo-600" />
-                Questions and Model Answers
-              </h3>
+              <div className="flex items-center space-x-4">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <Edit3 className="h-5 w-5 mr-2 text-indigo-600" />
+                  Questions and Model Answers
+                </h3>
+                <div className="bg-indigo-50 px-3 py-1 rounded-lg">
+                  <span className="text-sm font-medium text-indigo-700">
+                    Total Marks: {questionAnswerPairs.reduce((sum, pair) => sum + pair.marks, 0)}
+                  </span>
+                </div>
+              </div>
               <button
                 type="button"
                 onClick={addQuestionAnswerPair}
@@ -423,6 +435,17 @@ const CreateTest = () => {
                       Question {index + 1}
                     </h4>
                     <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2">
+                        <label className="text-sm text-gray-600">Type:</label>
+                        <select
+                          value={pair.question_type}
+                          onChange={(e) => updateQuestionAnswerPair(pair.id, 'question_type', e.target.value)}
+                          className="px-3 py-1 border border-gray-300 rounded text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >
+                          <option value="subjective">Subjective</option>
+                          <option value="coding-python">Coding - Python</option>
+                        </select>
+                      </div>
                       <div className="flex items-center space-x-2">
                         <label className="text-sm text-gray-600">Marks:</label>
                         <input
@@ -451,11 +474,17 @@ const CreateTest = () => {
                     {/* Question Input */}
                     <div>
                       <label className="block">
-                        <span className="text-gray-700 text-sm font-medium">Question Text</span>
+                        <span className="text-gray-700 text-sm font-medium">
+                          Question Text {pair.question_type === 'coding-python' && <span className="text-indigo-600">(Python Coding)</span>}
+                        </span>
                         <textarea
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                           rows={6}
-                          placeholder={`Enter question ${index + 1} here...`}
+                          placeholder={
+                            pair.question_type === 'coding-python' 
+                              ? `Write a Python function to solve the following problem:\n\nExample: "Write a function that takes a list of numbers and returns the sum of even numbers."`
+                              : `Enter question ${index + 1} here...`
+                          }
                           value={pair.question}
                           onChange={(e) => updateQuestionAnswerPair(pair.id, 'question', e.target.value)}
                           required
@@ -466,16 +495,29 @@ const CreateTest = () => {
                     {/* Answer Input */}
                     <div>
                       <label className="block">
-                        <span className="text-gray-700 text-sm font-medium">Model Answer</span>
+                        <span className="text-gray-700 text-sm font-medium">
+                          Model Answer {pair.question_type === 'coding-python' && <span className="text-indigo-600">(Python Code)</span>}
+                        </span>
                         <textarea
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ${
+                            pair.question_type === 'coding-python' ? 'font-mono text-sm' : ''
+                          }`}
                           rows={6}
-                          placeholder={`Enter model answer for question ${index + 1}...`}
+                          placeholder={
+                            pair.question_type === 'coding-python'
+                              ? `def solve_problem(numbers):\n    return sum(num for num in numbers if num % 2 == 0)\n\n# Test cases:\n# test: [1,2,3,4,5,6] -> 12`
+                              : `Enter model answer for question ${index + 1}...`
+                          }
                           value={pair.answer}
                           onChange={(e) => updateQuestionAnswerPair(pair.id, 'answer', e.target.value)}
                           required
                         />
                       </label>
+                      {pair.question_type === 'coding-python' && (
+                        <p className="mt-1 text-xs text-gray-500">
+                          💡 Tip: Include test cases in comments (e.g., # test: input -&gt; expected_output)
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

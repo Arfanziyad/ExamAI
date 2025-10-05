@@ -154,8 +154,10 @@ class AnalyticsService:
         scores_over_time = []
         
         for submission in submissions:
-            if submission.evaluation:
-                eval_data = submission.evaluation
+            # Get the first evaluation (since we changed to one-to-many relationship)
+            evaluation = submission.evaluations[0] if submission.evaluations else None
+            if evaluation:
+                eval_data = evaluation
                 percentage = (eval_data.marks_awarded / eval_data.max_marks) * 100
                 
                 submission_data = {

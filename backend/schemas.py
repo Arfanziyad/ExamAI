@@ -64,6 +64,7 @@ class QuestionCreate(BaseModel):
     question_number: int
     max_marks: int = 10
     subject_area: str = "general"
+    question_type: str = "subjective"  # "subjective" or "coding-python"
 
 class QuestionResponse(BaseModel):
     id: int
@@ -72,6 +73,7 @@ class QuestionResponse(BaseModel):
     question_number: int
     max_marks: int
     subject_area: str
+    question_type: str
     
     class Config:
         from_attributes = True

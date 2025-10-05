@@ -2,6 +2,11 @@ from database import Base, create_tables, engine
 from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # This helps with type checking without causing circular imports
+    pass
 
 class QuestionPaper(Base):
     __tablename__ = "question_papers"
@@ -14,6 +19,7 @@ class QuestionPaper(Base):
     answer_text = Column(Text, nullable=False)
     file_path = Column(String, nullable=True)
     answer_file_path = Column(String, nullable=True)
+    total_marks = Column(Integer, default=0)  # Total marks for all questions
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationships
@@ -28,6 +34,7 @@ class Question(Base):
     question_number = Column(Integer, nullable=False)
     max_marks = Column(Integer, default=10)
     subject_area = Column(String, default="general")
+    question_type = Column(String, default="subjective")  # "subjective" or "coding-python"
     
     # Relationships
     question_paper = relationship("QuestionPaper", back_populates="questions")
@@ -59,9 +66,9 @@ class Submission(Base):
     ocr_confidence = Column(Float, nullable=True)
     submitted_at = Column(DateTime, default=datetime.utcnow)
     
-    # Relationships
+    # Relationships - using string references to avoid circular dependency
     question = relationship("Question", back_populates="submissions")
-    evaluation = relationship("Evaluation", back_populates="submission", uselist=False, cascade="all, delete-orphan")
+    evaluations = relationship("Evaluation", back_populates="submission", cascade="all, delete-orphan")
 
 class Evaluation(Base):
     __tablename__ = "evaluations"
@@ -80,5 +87,5 @@ class Evaluation(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, onupdate=datetime.utcnow)
     
-    # Relationships
-    submission = relationship("Submission", back_populates="evaluation")
+    # Relationships - using string reference to avoid circular dependency
+    submission = relationship("Submission", back_populates="evaluations")

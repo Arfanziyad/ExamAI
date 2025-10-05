@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from database import get_db, create_tables
 from models import QuestionPaper, Question, AnswerScheme, Submission, Evaluation
+from evaluators.subjective_evaluator import SubjectiveEvaluator
+from evaluators.coding_evaluator import CodingEvaluator
 import logging
 
 # Configure logging
@@ -185,6 +187,9 @@ def create_question_paper_multiple():
         # Get database session
         db = next(get_db())
         try:
+            # Calculate total marks for the question paper
+            total_marks = sum(q_data.get("max_marks", 10) for q_data in questions_data)
+            
             # Create question paper
             # For backward compatibility, combine all questions into question_text and answer_text
             combined_question_text = "\n\n".join([
@@ -201,7 +206,8 @@ def create_question_paper_multiple():
                 subject=subject,
                 description=description,
                 question_text=combined_question_text,
-                answer_text=combined_answer_text
+                answer_text=combined_answer_text,
+                total_marks=total_marks
             )
             
             # Save to database
@@ -218,7 +224,8 @@ def create_question_paper_multiple():
                         question_text=q_data["question_text"].strip(),
                         question_number=q_data.get("question_number", i + 1),
                         max_marks=q_data.get("max_marks", 10),
-                        subject_area=subject.lower() if subject else 'general'
+                        subject_area=subject.lower() if subject else 'general',
+                        question_type=q_data.get("question_type", "subjective")
                     )
                     db.add(question)
                     db.commit()
@@ -994,6 +1001,55 @@ def classify_question_paper_text(text: str) -> tuple[str, str]:
     answer_text = '\n\n'.join(answers).strip()
     
     return question_text, answer_text
+
+@app.route("/api/question-papers/<int:question_paper_id>/total-score", methods=["GET"])
+def get_question_paper_total_score(question_paper_id):
+    """Get total score summary for a question paper"""
+    try:
+        db = next(get_db())
+        try:
+            # Get question paper
+            question_paper = db.query(QuestionPaper).filter(QuestionPaper.id == question_paper_id).first()
+            if not question_paper:
+                return jsonify({"error": "Question paper not found"}), 404
+            
+            # Get all questions for this paper
+            questions = db.query(Question).filter(Question.question_paper_id == question_paper_id).all()
+            
+            # Calculate total possible marks
+            total_possible_marks = sum(question.max_marks for question in questions)
+            
+            # Get all submissions and their evaluations
+            question_scores = []
+            for question in questions:
+                submissions = db.query(Submission).filter(Submission.question_id == question.id).all()
+                
+                for submission in submissions:
+                    if submission.evaluations:
+                        evaluation = submission.evaluations[0]  # Get first evaluation
+                        question_text = str(question.question_text)
+                        question_scores.append({
+                            "question_id": question.id,
+                            "question_number": question.question_number,
+                            "question_text": question_text[:100] + "..." if len(question_text) > 100 else question_text,
+                            "student_name": submission.student_name,
+                            "marks_awarded": evaluation.marks_awarded,
+                            "max_marks": question.max_marks,
+                            "submission_id": submission.id
+                        })
+            
+            return jsonify({
+                "question_paper_id": question_paper_id,
+                "title": question_paper.title,
+                "total_possible_marks": total_possible_marks,
+                "question_scores": question_scores
+            })
+            
+        finally:
+            db.close()
+    except Exception as e:
+        logger.error(f"Error getting total score: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
 
 if __name__ == "__main__":
     try:

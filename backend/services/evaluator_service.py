@@ -2,6 +2,7 @@ import time
 import logging
 from typing import Dict, Any, Optional
 from evaluators.subjective_evaluator import SubjectiveEvaluator
+from evaluators.coding_evaluator import CodingEvaluator
 from sqlalchemy.orm import Session
 from models import Submission, QuestionPaper, Question, AnswerScheme, Evaluation
 
@@ -9,8 +10,9 @@ logger = logging.getLogger(__name__)
 
 class EvaluatorService:
     def __init__(self):
-        self.evaluator = SubjectiveEvaluator()
-        logger.info("EvaluatorService initialized with SubjectiveEvaluator")
+        self.subjective_evaluator = SubjectiveEvaluator()
+        self.coding_evaluator = CodingEvaluator()
+        logger.info("EvaluatorService initialized with both SubjectiveEvaluator and CodingEvaluator")
     
     async def evaluate_submission_with_ocr(
         self, 
@@ -46,6 +48,7 @@ class EvaluatorService:
             question_text = str(getattr(question_paper, 'question_text', ''))
             answer_text = str(getattr(question_paper, 'answer_text', ''))
             subject_area = str(getattr(question, 'subject_area', 'general'))
+            question_type = str(getattr(question, 'question_type', 'subjective'))
             max_marks = int(getattr(question, 'max_marks', 10))
             
             # Evaluate against model answer
@@ -54,6 +57,7 @@ class EvaluatorService:
                 student_answer=extracted_text,
                 model_answer=answer_text,
                 subject_area=subject_area,
+                question_type=question_type,
                 max_marks=max_marks
             )
 
@@ -160,25 +164,34 @@ class EvaluatorService:
         student_answer: str, 
         model_answer: str, 
         subject_area: str = 'general',
+        question_type: str = 'subjective',
         max_marks: int = 10
     ) -> Dict[str, Any]:
         """
-        Evaluate student answer using the enhanced subjective evaluator
+        Evaluate student answer using the appropriate evaluator based on question type
         """
         try:
             start_time = time.time()
             
             # Log evaluation start
-            logger.info(f"Starting evaluation for subject: {subject_area}")
+            logger.info(f"Starting evaluation for question type: {question_type}, subject: {subject_area}")
             logger.debug(f"Question length: {len(question_text)}, Student answer length: {len(student_answer)}")
             
-            # Use your enhanced evaluator
-            evaluation_result = self.evaluator.evaluate(
-                question=question_text,
-                student_answer=student_answer,
-                model_answer=model_answer,
-                subject_area=subject_area
-            )
+            # Choose the appropriate evaluator
+            if question_type == 'coding-python':
+                evaluation_result = self.coding_evaluator.evaluate(
+                    question=question_text,
+                    student_answer=student_answer,
+                    model_answer=model_answer
+                )
+            else:
+                # Default to subjective evaluation
+                evaluation_result = self.subjective_evaluator.evaluate(
+                    question=question_text,
+                    student_answer=student_answer,
+                    model_answer=model_answer,
+                    subject_area=subject_area
+                )
             
             # Calculate evaluation time
             evaluation_time = time.time() - start_time

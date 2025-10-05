@@ -332,16 +332,74 @@ const EvaluatePage = () => {
 
       {/* Submissions and Evaluations */}
       {selectedTestId && !loading && submissions.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
-            <div className="flex items-center space-x-2 text-white">
-              <User className="h-5 w-5" />
-              <h2 className="text-lg font-semibold">Student Submissions & Evaluations</h2>
-              <span className="bg-white bg-opacity-20 px-2 py-1 rounded-full text-sm">
-                {submissions.length} submission{submissions.length !== 1 ? 's' : ''}
-              </span>
+        <div className="space-y-6">
+          {/* Total Score Summary */}
+          {(() => {
+            const evaluatedSubmissions = submissions.filter(s => s.evaluation);
+            if (evaluatedSubmissions.length === 0) return null;
+            
+            // Group submissions by student
+            const studentScores = evaluatedSubmissions.reduce((acc, submission) => {
+              const studentName = submission.student_name;
+              if (!acc[studentName]) {
+                acc[studentName] = {
+                  totalMarks: 0,
+                  maxMarks: 0,
+                  submissions: []
+                };
+              }
+              // We already filtered for submissions with evaluations, so this is safe
+              const evaluation = submission.evaluation!;
+              acc[studentName].totalMarks += evaluation.marks_awarded;
+              acc[studentName].maxMarks += evaluation.max_marks;
+              acc[studentName].submissions.push(submission);
+              return acc;
+            }, {} as Record<string, { totalMarks: number; maxMarks: number; submissions: typeof submissions }>);
+            
+            return (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
+                  <div className="flex items-center space-x-2 text-white">
+                    <Award className="h-5 w-5" />
+                    <h2 className="text-lg font-semibold">Total Score Summary</h2>
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {Object.entries(studentScores).map(([studentName, scores]) => (
+                      <div key={studentName} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+                        <div className="text-center">
+                          <h3 className="font-semibold text-gray-900 mb-2">{studentName}</h3>
+                          <div className="text-3xl font-bold text-indigo-600 mb-1">
+                            {scores.totalMarks} / {scores.maxMarks}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            Total Score
+                          </div>
+                          <div className="mt-2 text-xs text-gray-500">
+                            {scores.submissions.length} question{scores.submissions.length !== 1 ? 's' : ''} completed
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+          
+          {/* Individual Submissions */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
+              <div className="flex items-center space-x-2 text-white">
+                <User className="h-5 w-5" />
+                <h2 className="text-lg font-semibold">Individual Question Results</h2>
+                <span className="bg-white bg-opacity-20 px-2 py-1 rounded-full text-sm">
+                  {submissions.length} submission{submissions.length !== 1 ? 's' : ''}
+                </span>
+              </div>
             </div>
-          </div>
           
           <div className="p-6 space-y-6">
             {submissions.map((submission, index) => (
@@ -514,6 +572,7 @@ const EvaluatePage = () => {
               </div>
             ))}
           </div>
+        </div>
         </div>
       )}
 
