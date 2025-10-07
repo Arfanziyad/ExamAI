@@ -654,9 +654,9 @@ def evaluate_submission(submission_id):
         db = next(get_db())
         try:
             from services.evaluator_service import EvaluatorService
-            from services.ocr_service import OCRService
+            from services.mock_ocr_service import MockOCRService  # Use mock OCR instead
             evaluator = EvaluatorService()
-            ocr = OCRService()
+            ocr = MockOCRService()  # Use mock OCR service
             
             # Get submission and question details
             from sqlalchemy import text
