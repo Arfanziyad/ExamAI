@@ -9,7 +9,7 @@ load_dotenv()
 
 class OCRService:
     def __init__(self):
-        self.api_key = os.getenv('OCR_API_KEY', '1153|7o2K4RXz4cR4i4aclY0RQFj9JiC7qy650U9DgEqKfd6cd682')
+        self.api_key = os.getenv('OCR_API_KEY', '1286|nb86cCmojAFaq8lyFBo2ai48JiuenIkqFf9KDRkG020666d1')
         self.base_url = 'https://www.handwritingocr.com/api/v3'
         self.headers = {
             'Authorization': f'Bearer {self.api_key}',

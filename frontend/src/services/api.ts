@@ -169,3 +169,46 @@ export async function getAllEvaluationResults() {
 
   return response.json();
 }
+
+// API functions for multi-question support (used by CreateTest page)
+
+export async function getStudentAggregatedScores(questionPaperId: number) {
+  const response = await fetch(`${API_BASE_URL}/api/question-papers/${questionPaperId}/student-scores`);
+  
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Failed to get student scores: ${response.status} ${text}`);
+  }
+
+  return response.json();
+}
+
+export async function getORGroupSummary(questionPaperId: number, studentName: string) {
+  const response = await fetch(`${API_BASE_URL}/api/question-papers/${questionPaperId}/or-groups/${encodeURIComponent(studentName)}`);
+  
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Failed to get OR group summary: ${response.status} ${text}`);
+  }
+
+  return response.json();
+}
+
+export async function evaluateSubmissionWithSequence(submissionId: number, forceReanalysis: boolean = false) {
+  const response = await fetch(`${API_BASE_URL}/api/submissions/${submissionId}/evaluate-with-sequence`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      force_reanalysis: forceReanalysis
+    }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Failed to evaluate submission with sequence analysis: ${response.status} ${text}`);
+  }
+
+  return response.json();
+}

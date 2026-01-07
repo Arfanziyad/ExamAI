@@ -5,8 +5,10 @@ import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import CreateTest from './pages/CreateTest';
 import TakeTest from './pages/TakeTest';
+import SubmitMultiAnswer from './pages/SubmitMultiAnswer';
 import EvaluatePage from './pages/EvaluatePage';
 import ViewResults from './pages/ViewResults';
+import ViewAggregatedResults from './pages/ViewAggregatedResults';
 import './index.css';
 
 function App() {
@@ -40,8 +42,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/create" element={<CreateTest />} />
             <Route path="/take" element={<TakeTest />} />
+            <Route path="/submit-multi" element={<SubmitMultiAnswer />} />
             <Route path="/evaluate" element={<EvaluatePage />} />
             <Route path="/results" element={<ViewResults />} />
+            <Route path="/results-aggregated" element={<ViewAggregatedResults />} />
           </Routes>
         </div>
       </div>

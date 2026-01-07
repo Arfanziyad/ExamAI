@@ -1,719 +1,491 @@
-[32mINFO[0m:     2025-09-18 07:54:25 | Starting server with enhanced logging configuration
-[32mINFO[0m:     2025-09-18 07:54:25 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 07:54:25 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 07:54:25 | Server configuration complete, starting server...
-[32mINFO[0m:     2025-09-18 07:54:27 | EvaluatorService initialized with SubjectiveEvaluator
-[32mINFO[0m:     2025-09-18 07:54:27 | Started server process [[36m13416[0m]
-[32mINFO[0m:     2025-09-18 07:54:27 | Started server process [[36m13416[0m]
-[32mINFO[0m:     2025-09-18 07:54:27 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 07:54:27 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 07:54:27 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 07:54:27 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 07:54:27 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:54:27 | COMMIT
-[32mINFO[0m:     2025-09-18 07:54:27 | COMMIT
-[32mINFO[0m:     2025-09-18 07:54:27 | Database tables created
-[32mINFO[0m:     2025-09-18 07:54:27 | Application startup complete.
-[32mINFO[0m:     2025-09-18 07:54:27 | Application startup complete.
-[32mINFO[0m:     2025-09-18 07:54:27 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 07:54:27 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 07:54:27 | Shutting down
-[32mINFO[0m:     2025-09-18 07:54:27 | Shutting down
-[32mINFO[0m:     2025-09-18 07:54:27 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 07:54:27 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 07:54:27 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 07:54:27 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 07:54:27 | Finished server process [[36m13416[0m]
-[32mINFO[0m:     2025-09-18 07:54:27 | Finished server process [[36m13416[0m]
-[32mINFO[0m:     2025-09-18 07:57:01 | Starting server with enhanced logging configuration
-[32mINFO[0m:     2025-09-18 07:57:01 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 07:57:01 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 07:57:01 | Server configuration complete, starting server...
-[32mINFO[0m:     2025-09-18 07:57:03 | EvaluatorService initialized with SubjectiveEvaluator
-[32mINFO[0m:     2025-09-18 07:57:03 | Started server process [[36m420[0m]
-[32mINFO[0m:     2025-09-18 07:57:03 | Started server process [[36m420[0m]
-[32mINFO[0m:     2025-09-18 07:57:03 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 07:57:03 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 07:57:03 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 07:57:03 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 07:57:03 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 07:57:03 | COMMIT
-[32mINFO[0m:     2025-09-18 07:57:03 | COMMIT
-[32mINFO[0m:     2025-09-18 07:57:03 | Database tables created
-[32mINFO[0m:     2025-09-18 07:57:03 | Application startup complete.
-[32mINFO[0m:     2025-09-18 07:57:03 | Application startup complete.
-[32mINFO[0m:     2025-09-18 07:57:03 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 07:57:03 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 07:57:03 | Shutting down
-[32mINFO[0m:     2025-09-18 07:57:03 | Shutting down
-[32mINFO[0m:     2025-09-18 07:57:03 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 07:57:03 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 07:57:03 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 07:57:03 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 07:57:03 | Finished server process [[36m420[0m]
-[32mINFO[0m:     2025-09-18 07:57:03 | Finished server process [[36m420[0m]
-[32mINFO[0m:     2025-09-18 08:06:35 | Starting server with enhanced logging configuration
-[32mINFO[0m:     2025-09-18 08:06:35 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 08:06:35 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 08:06:35 | Server configuration complete, starting server...
-[32mINFO[0m:     2025-09-18 08:06:37 | EvaluatorService initialized with SubjectiveEvaluator
-[32mINFO[0m:     2025-09-18 08:06:37 | Started server process [[36m25692[0m]
-[32mINFO[0m:     2025-09-18 08:06:37 | Started server process [[36m25692[0m]
-[32mINFO[0m:     2025-09-18 08:06:37 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 08:06:37 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 08:06:37 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 08:06:37 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 08:06:37 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 08:06:37 | COMMIT
-[32mINFO[0m:     2025-09-18 08:06:37 | COMMIT
-[32mINFO[0m:     2025-09-18 08:06:37 | Database tables created
-[32mINFO[0m:     2025-09-18 08:06:37 | Application startup complete.
-[32mINFO[0m:     2025-09-18 08:06:37 | Application startup complete.
-[32mINFO[0m:     2025-09-18 08:06:37 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 08:06:37 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 08:06:37 | Shutting down
-[32mINFO[0m:     2025-09-18 08:06:37 | Shutting down
-[32mINFO[0m:     2025-09-18 08:06:37 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 08:06:37 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 08:06:37 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 08:06:37 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 08:06:37 | Finished server process [[36m25692[0m]
-[32mINFO[0m:     2025-09-18 08:06:37 | Finished server process [[36m25692[0m]
-[32mINFO[0m:     2025-09-18 09:17:01 | Starting server with enhanced logging configuration
-[32mINFO[0m:     2025-09-18 09:17:01 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:17:01 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:17:01 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:17:01 | Server configuration complete, starting server...
-[36mDEBUG[0m:    2025-09-18 09:17:01 | Using selector: SelectSelector
-[32mINFO[0m:     2025-09-18 09:17:02 | EvaluatorService initialized with SubjectiveEvaluator
-[32mINFO[0m:     2025-09-18 09:17:02 | Successfully mounted static files directory: C:\Projects\AI_simple_final\backend\storage
-[32mINFO[0m:     2025-09-18 09:17:02 | Started server process [[36m25856[0m]
-[32mINFO[0m:     2025-09-18 09:17:02 | Started server process [[36m25856[0m]
-[32mINFO[0m:     2025-09-18 09:17:02 | Started server process [[36m25856[0m]
-[32mINFO[0m:     2025-09-18 09:17:02 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:17:02 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:17:02 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:17:02 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 09:17:02 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'title', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'title', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'description', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'description', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'key_points', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'key_points', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:17:02 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:17:02 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:17:02 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:17:02 | COMMIT
-[32mINFO[0m:     2025-09-18 09:17:02 | COMMIT
-[32mINFO[0m:     2025-09-18 09:17:02 | Database tables created
-[32mINFO[0m:     2025-09-18 09:17:02 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:17:02 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:17:02 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:17:02 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:17:02 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:17:02 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:17:02 | Shutting down
-[32mINFO[0m:     2025-09-18 09:17:02 | Shutting down
-[32mINFO[0m:     2025-09-18 09:17:02 | Shutting down
-[32mINFO[0m:     2025-09-18 09:17:02 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:17:02 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:17:02 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:17:02 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:17:02 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:17:02 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:17:02 | Finished server process [[36m25856[0m]
-[32mINFO[0m:     2025-09-18 09:17:02 | Finished server process [[36m25856[0m]
-[32mINFO[0m:     2025-09-18 09:17:02 | Finished server process [[36m25856[0m]
-[32mINFO[0m:     2025-09-18 09:18:10 | Starting server with enhanced logging configuration
-[32mINFO[0m:     2025-09-18 09:18:10 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:18:10 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:18:10 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:18:10 | Server configuration complete, starting server...
-[36mDEBUG[0m:    2025-09-18 09:18:10 | Using selector: SelectSelector
-[32mINFO[0m:     2025-09-18 09:18:11 | EvaluatorService initialized with SubjectiveEvaluator
-[32mINFO[0m:     2025-09-18 09:18:11 | Successfully mounted static files directory: C:\Projects\AI_simple_final\backend\storage
-[32mINFO[0m:     2025-09-18 09:18:11 | Started server process [[36m6608[0m]
-[32mINFO[0m:     2025-09-18 09:18:11 | Started server process [[36m6608[0m]
-[32mINFO[0m:     2025-09-18 09:18:11 | Started server process [[36m6608[0m]
-[32mINFO[0m:     2025-09-18 09:18:11 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:18:11 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:18:11 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:18:11 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 09:18:11 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:18:11 | PRAGMA temp.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:18:11 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE question_papers (
-	id INTEGER NOT NULL, 
-	title VARCHAR NOT NULL, 
-	subject VARCHAR NOT NULL, 
-	description TEXT, 
-	question_text TEXT NOT NULL, 
-	answer_text TEXT NOT NULL, 
-	file_path VARCHAR, 
-	answer_file_path VARCHAR, 
-	created_at DATETIME, 
-	PRIMARY KEY (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE question_papers (
-	id INTEGER NOT NULL, 
-	title VARCHAR NOT NULL, 
-	subject VARCHAR NOT NULL, 
-	description TEXT, 
-	question_text TEXT NOT NULL, 
-	answer_text TEXT NOT NULL, 
-	file_path VARCHAR, 
-	answer_file_path VARCHAR, 
-	created_at DATETIME, 
-	PRIMARY KEY (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00263s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00263s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_question_papers_id ON question_papers (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_question_papers_id ON question_papers (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00073s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00073s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE questions (
-	id INTEGER NOT NULL, 
-	question_paper_id INTEGER NOT NULL, 
-	question_text TEXT NOT NULL, 
-	question_number INTEGER NOT NULL, 
-	max_marks INTEGER, 
-	subject_area VARCHAR, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(question_paper_id) REFERENCES question_papers (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE questions (
-	id INTEGER NOT NULL, 
-	question_paper_id INTEGER NOT NULL, 
-	question_text TEXT NOT NULL, 
-	question_number INTEGER NOT NULL, 
-	max_marks INTEGER, 
-	subject_area VARCHAR, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(question_paper_id) REFERENCES question_papers (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00081s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00081s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_questions_id ON questions (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_questions_id ON questions (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00092s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00092s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE answer_schemes (
-	id INTEGER NOT NULL, 
-	question_id INTEGER NOT NULL, 
-	model_answer TEXT NOT NULL, 
-	key_points JSON, 
-	marking_criteria JSON, 
-	sample_answers JSON, 
-	created_at DATETIME, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(question_id) REFERENCES questions (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE answer_schemes (
-	id INTEGER NOT NULL, 
-	question_id INTEGER NOT NULL, 
-	model_answer TEXT NOT NULL, 
-	key_points JSON, 
-	marking_criteria JSON, 
-	sample_answers JSON, 
-	created_at DATETIME, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(question_id) REFERENCES questions (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00150s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00150s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_answer_schemes_id ON answer_schemes (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_answer_schemes_id ON answer_schemes (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00217s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00217s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE submissions (
-	id INTEGER NOT NULL, 
-	question_id INTEGER NOT NULL, 
-	student_name VARCHAR NOT NULL, 
-	handwriting_image_path VARCHAR NOT NULL, 
-	extracted_text TEXT, 
-	ocr_confidence FLOAT, 
-	submitted_at DATETIME, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(question_id) REFERENCES questions (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE submissions (
-	id INTEGER NOT NULL, 
-	question_id INTEGER NOT NULL, 
-	student_name VARCHAR NOT NULL, 
-	handwriting_image_path VARCHAR NOT NULL, 
-	extracted_text TEXT, 
-	ocr_confidence FLOAT, 
-	submitted_at DATETIME, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(question_id) REFERENCES questions (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00066s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00066s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_submissions_id ON submissions (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_submissions_id ON submissions (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00141s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00141s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE evaluations (
-	id INTEGER NOT NULL, 
-	submission_id INTEGER NOT NULL, 
-	similarity_score FLOAT NOT NULL, 
-	marks_awarded INTEGER NOT NULL, 
-	max_marks INTEGER NOT NULL, 
-	detailed_scores JSON, 
-	ai_feedback TEXT NOT NULL, 
-	manual_marks INTEGER, 
-	manual_feedback TEXT, 
-	is_manually_overridden INTEGER, 
-	evaluation_time FLOAT, 
-	created_at DATETIME, 
-	updated_at DATETIME, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(submission_id) REFERENCES submissions (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | 
-CREATE TABLE evaluations (
-	id INTEGER NOT NULL, 
-	submission_id INTEGER NOT NULL, 
-	similarity_score FLOAT NOT NULL, 
-	marks_awarded INTEGER NOT NULL, 
-	max_marks INTEGER NOT NULL, 
-	detailed_scores JSON, 
-	ai_feedback TEXT NOT NULL, 
-	manual_marks INTEGER, 
-	manual_feedback TEXT, 
-	is_manually_overridden INTEGER, 
-	evaluation_time FLOAT, 
-	created_at DATETIME, 
-	updated_at DATETIME, 
-	PRIMARY KEY (id), 
-	FOREIGN KEY(submission_id) REFERENCES submissions (id)
-)
-
-
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00095s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00095s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_evaluations_id ON evaluations (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | CREATE INDEX ix_evaluations_id ON evaluations (id)
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00060s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | [no key 0.00060s] ()
-[32mINFO[0m:     2025-09-18 09:18:11 | COMMIT
-[32mINFO[0m:     2025-09-18 09:18:11 | COMMIT
-[32mINFO[0m:     2025-09-18 09:18:11 | Database tables created
-[32mINFO[0m:     2025-09-18 09:18:11 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:18:11 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:18:11 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:18:11 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:18:11 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:18:11 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:18:11 | Shutting down
-[32mINFO[0m:     2025-09-18 09:18:11 | Shutting down
-[32mINFO[0m:     2025-09-18 09:18:11 | Shutting down
-[32mINFO[0m:     2025-09-18 09:18:11 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:18:11 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:18:11 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:18:11 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:18:11 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:18:11 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:18:11 | Finished server process [[36m6608[0m]
-[32mINFO[0m:     2025-09-18 09:18:11 | Finished server process [[36m6608[0m]
-[32mINFO[0m:     2025-09-18 09:18:11 | Finished server process [[36m6608[0m]
-[32mINFO[0m:     2025-09-18 09:29:44 | Starting server with enhanced logging configuration
-[32mINFO[0m:     2025-09-18 09:29:44 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:29:44 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:29:44 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
-[32mINFO[0m:     2025-09-18 09:29:44 | Server configuration complete, starting server...
-[36mDEBUG[0m:    2025-09-18 09:29:44 | Using selector: SelectSelector
-[32mINFO[0m:     2025-09-18 09:29:46 | EvaluatorService initialized with SubjectiveEvaluator
-[32mINFO[0m:     2025-09-18 09:29:46 | Successfully mounted static files directory: c:\Projects\AI_simple_final\backend\storage
-[32mINFO[0m:     2025-09-18 09:29:46 | Started server process [[36m24060[0m]
-[32mINFO[0m:     2025-09-18 09:29:46 | Started server process [[36m24060[0m]
-[32mINFO[0m:     2025-09-18 09:29:46 | Started server process [[36m24060[0m]
-[32mINFO[0m:     2025-09-18 09:29:46 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:29:46 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:29:46 | Waiting for application startup.
-[32mINFO[0m:     2025-09-18 09:29:46 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 09:29:46 | BEGIN (implicit)
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("question_papers")
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'title', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'title', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'description', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'description', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("questions")
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'question_text', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("answer_schemes")
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'key_points', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'key_points', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("submissions")
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:29:46 | PRAGMA main.table_info("evaluations")
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[32mINFO[0m:     2025-09-18 09:29:46 | [raw sql] ()
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (0, 'id', 'INTEGER', 1, None, 1)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
-[36mDEBUG[0m:    2025-09-18 09:29:46 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
-[32mINFO[0m:     2025-09-18 09:29:46 | COMMIT
-[32mINFO[0m:     2025-09-18 09:29:46 | COMMIT
-[32mINFO[0m:     2025-09-18 09:29:46 | Database tables created
-[32mINFO[0m:     2025-09-18 09:29:46 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:29:46 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:29:46 | Application startup complete.
-[32mINFO[0m:     2025-09-18 09:29:46 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:29:46 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:29:46 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
-[32mINFO[0m:     2025-09-18 09:29:46 | Shutting down
-[32mINFO[0m:     2025-09-18 09:29:46 | Shutting down
-[32mINFO[0m:     2025-09-18 09:29:46 | Shutting down
-[32mINFO[0m:     2025-09-18 09:29:46 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:29:46 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:29:46 | Waiting for application shutdown.
-[32mINFO[0m:     2025-09-18 09:29:46 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:29:46 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:29:46 | Application shutdown complete.
-[32mINFO[0m:     2025-09-18 09:29:46 | Finished server process [[36m24060[0m]
-[32mINFO[0m:     2025-09-18 09:29:46 | Finished server process [[36m24060[0m]
-[32mINFO[0m:     2025-09-18 09:29:46 | Finished server process [[36m24060[0m]
+[36mDEBUG[0m:    2025-12-08 14:09:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:09:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:39 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/README.md HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:09:39 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:47 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:09:48 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:48 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:09:48 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:48 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json HTTP/11" 404 0
+[36mDEBUG[0m:    2025-12-08 14:09:49 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:09:49 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:49 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:09:49 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:50 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/1_Pooling/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:09:50 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/1_Pooling%2Fconfig.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:09:50 | https://huggingface.co:443 "GET /api/models/sentence-transformers/all-mpnet-base-v2 HTTP/11" 200 6924
+[32mINFO[0m:     2025-12-08 14:09:50 | EvaluatorService initialized with both SubjectiveEvaluator and CodingEvaluator
+[32mINFO[0m:     2025-12-08 14:09:50 | Successfully mounted static files directory: C:\Projects\AI_simple_final\backend\storage
+[32mINFO[0m:     2025-12-08 14:09:50 | Started server process [[36m21456[0m]
+[32mINFO[0m:     2025-12-08 14:09:50 | Started server process [[36m21456[0m]
+[32mINFO[0m:     2025-12-08 14:09:50 | Started server process [[36m21456[0m]
+[32mINFO[0m:     2025-12-08 14:09:50 | Waiting for application startup.
+[32mINFO[0m:     2025-12-08 14:09:50 | Waiting for application startup.
+[32mINFO[0m:     2025-12-08 14:09:50 | Waiting for application startup.
+[32mINFO[0m:     2025-12-08 14:09:50 | BEGIN (implicit)
+[32mINFO[0m:     2025-12-08 14:09:50 | BEGIN (implicit)
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("question_papers")
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("question_papers")
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'title', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'title', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'description', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'description', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'total_marks', 'INTEGER', 0, '0', 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'total_marks', 'INTEGER', 0, '0', 0)
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("questions")
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("questions")
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'question_type', 'VARCHAR', 0, '"subjective"', 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'question_type', 'VARCHAR', 0, '"subjective"', 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'or_group_id', 'VARCHAR(50)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'or_group_id', 'VARCHAR(50)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'or_group_title', 'VARCHAR(200)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'or_group_title', 'VARCHAR(200)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'is_attempted', 'INTEGER', 0, '0', 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'is_attempted', 'INTEGER', 0, '0', 0)
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("answer_schemes")
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("answer_schemes")
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'key_points', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'key_points', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("submissions")
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("submissions")
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'answer_sequence', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'answer_sequence', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'answer_sections', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'answer_sections', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'sequence_confidence', 'REAL', 0, '1.0', 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'sequence_confidence', 'REAL', 0, '1.0', 0)
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("evaluations")
+[32mINFO[0m:     2025-12-08 14:09:50 | PRAGMA main.table_info("evaluations")
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[32mINFO[0m:     2025-12-08 14:09:50 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-08 14:09:50 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
+[32mINFO[0m:     2025-12-08 14:09:50 | COMMIT
+[32mINFO[0m:     2025-12-08 14:09:50 | COMMIT
+[32mINFO[0m:     2025-12-08 14:09:50 | Database tables created
+[32mINFO[0m:     2025-12-08 14:09:50 | Application startup complete.
+[32mINFO[0m:     2025-12-08 14:09:50 | Application startup complete.
+[32mINFO[0m:     2025-12-08 14:09:50 | Application startup complete.
+[32mINFO[0m:     2025-12-08 14:09:50 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-12-08 14:09:50 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-12-08 14:09:50 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-12-08 14:09:50 | Shutting down
+[32mINFO[0m:     2025-12-08 14:09:50 | Shutting down
+[32mINFO[0m:     2025-12-08 14:09:50 | Shutting down
+[32mINFO[0m:     2025-12-08 14:09:51 | Waiting for application shutdown.
+[32mINFO[0m:     2025-12-08 14:09:51 | Waiting for application shutdown.
+[32mINFO[0m:     2025-12-08 14:09:51 | Waiting for application shutdown.
+[32mINFO[0m:     2025-12-08 14:09:51 | Application shutdown complete.
+[32mINFO[0m:     2025-12-08 14:09:51 | Application shutdown complete.
+[32mINFO[0m:     2025-12-08 14:09:51 | Application shutdown complete.
+[32mINFO[0m:     2025-12-08 14:09:51 | Finished server process [[36m21456[0m]
+[32mINFO[0m:     2025-12-08 14:09:51 | Finished server process [[36m21456[0m]
+[32mINFO[0m:     2025-12-08 14:09:51 | Finished server process [[36m21456[0m]
+[32mINFO[0m:     2025-12-08 14:26:08 | Starting server with enhanced logging configuration
+[32mINFO[0m:     2025-12-08 14:26:08 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-08 14:26:08 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-08 14:26:08 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-08 14:26:08 | Server configuration complete, starting server...
+[36mDEBUG[0m:    2025-12-08 14:26:08 | Using selector: SelectSelector
+[36mDEBUG[0m:    2025-12-08 14:26:15 | pydot initializing
+[36mDEBUG[0m:    2025-12-08 14:26:15 | pydot 4.0.1
+[36mDEBUG[0m:    2025-12-08 14:26:15 | pydot core module initializing
+[32mINFO[0m:     2025-12-08 14:26:27 | Use pytorch device_name: cpu
+[32mINFO[0m:     2025-12-08 14:26:27 | Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+[36mDEBUG[0m:    2025-12-08 14:26:27 | Starting new HTTPS connection (1): huggingface.co:443
+[36mDEBUG[0m:    2025-12-08 14:26:30 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:30 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:31 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:33 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:34 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:34 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:34 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:34 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/README.md HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:34 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:35 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:35 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:35 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/sentence_bert_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:35 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json HTTP/11" 404 0
+[36mDEBUG[0m:    2025-12-08 14:26:35 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:35 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:36 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:36 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:37 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:37 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/1_Pooling%2Fconfig.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:37 | https://huggingface.co:443 "GET /api/models/sentence-transformers/all-MiniLM-L6-v2 HTTP/11" 200 6963
+[32mINFO[0m:     2025-12-08 14:26:37 | Use pytorch device_name: cpu
+[32mINFO[0m:     2025-12-08 14:26:37 | Load pretrained SentenceTransformer: all-mpnet-base-v2
+[36mDEBUG[0m:    2025-12-08 14:26:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:39 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:39 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:39 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/README.md HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:39 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:39 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:39 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:40 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-08 14:26:40 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-08 14:26:40 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json HTTP/11" 404 0
+[32mINFO[0m:     2025-12-09 10:54:08 | Starting server with enhanced logging configuration
+[32mINFO[0m:     2025-12-09 10:54:08 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-09 10:54:08 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-09 10:54:08 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-09 10:54:08 | Server configuration complete, starting server...
+[36mDEBUG[0m:    2025-12-09 10:54:08 | Using selector: SelectSelector
+[36mDEBUG[0m:    2025-12-09 10:54:18 | pydot initializing
+[36mDEBUG[0m:    2025-12-09 10:54:18 | pydot 4.0.1
+[36mDEBUG[0m:    2025-12-09 10:54:18 | pydot core module initializing
+[32mINFO[0m:     2025-12-09 10:54:29 | Use pytorch device_name: cpu
+[32mINFO[0m:     2025-12-09 10:54:29 | Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+[36mDEBUG[0m:    2025-12-09 10:54:29 | Starting new HTTPS connection (1): huggingface.co:443
+[36mDEBUG[0m:    2025-12-09 10:54:30 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:30 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:30 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:30 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:30 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:30 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:31 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:31 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/README.md HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:31 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:31 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:31 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:32 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/sentence_bert_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:32 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json HTTP/11" 404 0
+[36mDEBUG[0m:    2025-12-09 10:54:32 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:32 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:34 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:34 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:34 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:34 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/1_Pooling%2Fconfig.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:35 | https://huggingface.co:443 "GET /api/models/sentence-transformers/all-MiniLM-L6-v2 HTTP/11" 200 6969
+[32mINFO[0m:     2025-12-09 10:54:35 | Use pytorch device_name: cpu
+[32mINFO[0m:     2025-12-09 10:54:35 | Load pretrained SentenceTransformer: all-mpnet-base-v2
+[36mDEBUG[0m:    2025-12-09 10:54:35 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:35 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:35 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:35 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:36 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:36 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:36 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/README.md HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:36 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:36 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:37 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:37 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:37 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:37 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json HTTP/11" 404 0
+[36mDEBUG[0m:    2025-12-09 10:54:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/1_Pooling/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-09 10:54:39 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/1_Pooling%2Fconfig.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-09 10:54:39 | https://huggingface.co:443 "GET /api/models/sentence-transformers/all-mpnet-base-v2 HTTP/11" 200 6935
+[32mINFO[0m:     2025-12-09 10:54:39 | EvaluatorService initialized with both SubjectiveEvaluator and CodingEvaluator
+[32mINFO[0m:     2025-12-09 10:54:39 | Successfully mounted static files directory: C:\Projects\AI_simple_final\backend\storage
+[32mINFO[0m:     2025-12-09 10:54:39 | Started server process [[36m15088[0m]
+[32mINFO[0m:     2025-12-09 10:54:39 | Started server process [[36m15088[0m]
+[32mINFO[0m:     2025-12-09 10:54:39 | Started server process [[36m15088[0m]
+[32mINFO[0m:     2025-12-09 10:54:39 | Waiting for application startup.
+[32mINFO[0m:     2025-12-09 10:54:39 | Waiting for application startup.
+[32mINFO[0m:     2025-12-09 10:54:39 | Waiting for application startup.
+[32mINFO[0m:     2025-12-09 10:54:39 | BEGIN (implicit)
+[32mINFO[0m:     2025-12-09 10:54:39 | BEGIN (implicit)
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("question_papers")
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("question_papers")
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'title', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'title', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'subject', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'description', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'description', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'answer_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'answer_file_path', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'total_marks', 'INTEGER', 0, '0', 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'total_marks', 'INTEGER', 0, '0', 0)
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("questions")
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("questions")
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'question_paper_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'question_text', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'question_number', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'max_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'subject_area', 'VARCHAR', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'question_type', 'VARCHAR', 0, '"subjective"', 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'question_type', 'VARCHAR', 0, '"subjective"', 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'or_group_id', 'VARCHAR(50)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'or_group_id', 'VARCHAR(50)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'or_group_title', 'VARCHAR(200)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'or_group_title', 'VARCHAR(200)', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'is_attempted', 'INTEGER', 0, '0', 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'is_attempted', 'INTEGER', 0, '0', 0)
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("answer_schemes")
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("answer_schemes")
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'model_answer', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'key_points', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'key_points', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'marking_criteria', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'sample_answers', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'created_at', 'DATETIME', 0, None, 0)
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("submissions")
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("submissions")
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'question_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'student_name', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'handwriting_image_path', 'VARCHAR', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'extracted_text', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'ocr_confidence', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'submitted_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'answer_sequence', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'answer_sequence', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'answer_sections', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'answer_sections', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'sequence_confidence', 'REAL', 0, '1.0', 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'sequence_confidence', 'REAL', 0, '1.0', 0)
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("evaluations")
+[32mINFO[0m:     2025-12-09 10:54:39 | PRAGMA main.table_info("evaluations")
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[32mINFO[0m:     2025-12-09 10:54:39 | [raw sql] ()
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Col ('cid', 'name', 'type', 'notnull', 'dflt_value', 'pk')
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (0, 'id', 'INTEGER', 1, None, 1)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (1, 'submission_id', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (2, 'similarity_score', 'FLOAT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (3, 'marks_awarded', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (4, 'max_marks', 'INTEGER', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (5, 'detailed_scores', 'JSON', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (6, 'ai_feedback', 'TEXT', 1, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (7, 'manual_marks', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (8, 'manual_feedback', 'TEXT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (9, 'is_manually_overridden', 'INTEGER', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (10, 'evaluation_time', 'FLOAT', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (11, 'created_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
+[36mDEBUG[0m:    2025-12-09 10:54:39 | Row (12, 'updated_at', 'DATETIME', 0, None, 0)
+[32mINFO[0m:     2025-12-09 10:54:39 | COMMIT
+[32mINFO[0m:     2025-12-09 10:54:39 | COMMIT
+[32mINFO[0m:     2025-12-09 10:54:39 | Database tables created
+[32mINFO[0m:     2025-12-09 10:54:39 | Application startup complete.
+[32mINFO[0m:     2025-12-09 10:54:39 | Application startup complete.
+[32mINFO[0m:     2025-12-09 10:54:39 | Application startup complete.
+[32mINFO[0m:     2025-12-09 10:54:39 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-12-09 10:54:39 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-12-09 10:54:39 | Uvicorn running on [1mhttp://0.0.0.0:8000[0m (Press CTRL+C to quit)
+[32mINFO[0m:     2025-12-09 10:54:39 | Shutting down
+[32mINFO[0m:     2025-12-09 10:54:39 | Shutting down
+[32mINFO[0m:     2025-12-09 10:54:39 | Shutting down
+[32mINFO[0m:     2025-12-09 10:54:39 | Waiting for application shutdown.
+[32mINFO[0m:     2025-12-09 10:54:39 | Waiting for application shutdown.
+[32mINFO[0m:     2025-12-09 10:54:39 | Waiting for application shutdown.
+[32mINFO[0m:     2025-12-09 10:54:39 | Application shutdown complete.
+[32mINFO[0m:     2025-12-09 10:54:39 | Application shutdown complete.
+[32mINFO[0m:     2025-12-09 10:54:39 | Application shutdown complete.
+[32mINFO[0m:     2025-12-09 10:54:39 | Finished server process [[36m15088[0m]
+[32mINFO[0m:     2025-12-09 10:54:39 | Finished server process [[36m15088[0m]
+[32mINFO[0m:     2025-12-09 10:54:39 | Finished server process [[36m15088[0m]
+[32mINFO[0m:     2025-12-10 09:44:16 | Starting server with enhanced logging configuration
+[32mINFO[0m:     2025-12-10 09:44:16 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-10 09:44:16 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-10 09:44:16 | Will watch for changes in these directories: ['C:\\Projects\\AI_simple_final\\backend']
+[32mINFO[0m:     2025-12-10 09:44:16 | Server configuration complete, starting server...
+[36mDEBUG[0m:    2025-12-10 09:44:16 | Using selector: SelectSelector
+[36mDEBUG[0m:    2025-12-10 09:44:24 | pydot initializing
+[36mDEBUG[0m:    2025-12-10 09:44:24 | pydot 4.0.1
+[36mDEBUG[0m:    2025-12-10 09:44:25 | pydot core module initializing
+[32mINFO[0m:     2025-12-10 09:44:36 | Use pytorch device_name: cpu
+[32mINFO[0m:     2025-12-10 09:44:36 | Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+[36mDEBUG[0m:    2025-12-10 09:44:36 | Starting new HTTPS connection (1): huggingface.co:443
+[36mDEBUG[0m:    2025-12-10 09:44:37 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:37 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:37 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:37 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:37 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:37 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/README.md HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:38 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:38 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/sentence_bert_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:39 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json HTTP/11" 404 0
+[36mDEBUG[0m:    2025-12-10 09:44:39 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:39 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:40 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:40 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:40 | https://huggingface.co:443 "HEAD /sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:40 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/1_Pooling%2Fconfig.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:41 | https://huggingface.co:443 "GET /api/models/sentence-transformers/all-MiniLM-L6-v2 HTTP/11" 200 6936
+[32mINFO[0m:     2025-12-10 09:44:41 | Use pytorch device_name: cpu
+[32mINFO[0m:     2025-12-10 09:44:41 | Load pretrained SentenceTransformer: all-mpnet-base-v2
+[36mDEBUG[0m:    2025-12-10 09:44:41 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:41 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:41 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:41 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:42 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:42 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:43 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/README.md HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:43 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:43 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:43 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:43 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:43 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:44 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json HTTP/11" 404 0
+[36mDEBUG[0m:    2025-12-10 09:44:44 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:44 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json HTTP/11" 200 0
+[36mDEBUG[0m:    2025-12-10 09:44:44 | https://huggingface.co:443 "HEAD /sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json HTTP/11" 307 0
+[36mDEBUG[0m:    2025-12-10 09:44:45 | https://huggingface.co:443 "HEAD /api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json HTTP/11" 200 0

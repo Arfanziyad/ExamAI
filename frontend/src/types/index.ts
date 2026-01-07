@@ -17,6 +17,13 @@ export interface Question {
   question_number: number;
   max_marks: number;
   subject_area: string;
+  question_type?: string;
+  // Sub-question support
+  main_question_number?: number;
+  sub_question?: string;
+  // OR Groups Support
+  or_group_id?: string;
+  is_attempted?: number;
 }
 
 export interface SubmissionData {
@@ -28,6 +35,18 @@ export interface SubmissionData {
   ocr_confidence?: number;
   submitted_at: string;
   evaluation?: EvaluationData;
+  // Flexible Answer Ordering Support
+  answer_sequence?: string[];
+  answer_sections?: AnswerSection[];
+  sequence_confidence?: number;
+}
+
+export interface AnswerSection {
+  question_number: string;
+  sub_question?: string;
+  content: string;
+  position_in_text: number;
+  confidence: number;
 }
 
 export interface EvaluationData {
@@ -67,6 +86,21 @@ export interface SubmissionResponse {
 export interface OCRVerificationRequest {
   type: 'question' | 'model_answer';
   corrected_text: string;
+}
+
+// OR Groups interfaces
+export interface ORGroup {
+  id: string;
+  title: string;
+  questions: Question[];
+  attempted_questions: Question[];
+  total_possible_marks: number;
+  earned_marks: number;
+}
+
+export interface ORGroupSummary {
+  or_groups: Record<string, ORGroup>;
+  standalone_questions: Question[];
 }
 
 // Legacy interfaces for backward compatibility (deprecated)

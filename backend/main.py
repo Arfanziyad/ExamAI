@@ -467,6 +467,11 @@ async def get_question_submissions(question_id: int, db: Session = Depends(get_d
     """Get all submissions for a question"""
     return db.query(Submission).filter(Submission.question_id == question_id).all()
 
+@app.get("/api/submissions", response_model=List[SubmissionResponse])
+async def get_all_submissions(db: Session = Depends(get_db)):
+    """Get all submissions"""
+    return db.query(Submission).all()
+
 # ==================== EVALUATION ENDPOINTS ====================
 
 @app.post("/api/submissions/{submission_id}/evaluate", response_model=EvaluationResponse)

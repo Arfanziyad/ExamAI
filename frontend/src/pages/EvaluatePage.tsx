@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Settings, FileText, User, ChevronDown, Award, AlertCircle, CheckCircle2, Clock, Loader2 } from 'lucide-react';
-import { getTests, getAllEvaluationResults } from '../services/api';
-import type { QuestionPaper, SubmissionData } from '../types';
+import { getTests, getAllEvaluationResults, getORGroupSummary } from '../services/api';
+import type { QuestionPaper, SubmissionData, ORGroupSummary } from '../types';
 
 interface TestSubmission extends SubmissionData {
   question_text: string;
@@ -18,6 +18,9 @@ const EvaluatePage = () => {
   const [evaluatingSubmissions, setEvaluatingSubmissions] = useState<Set<number>>(new Set());
   const [ocrProcessingSubmissions, setOcrProcessingSubmissions] = useState<Set<number>>(new Set());
   const [error, setError] = useState<string | null>(null);
+  
+  // OR Groups state
+  const [orGroupSummaries, setOrGroupSummaries] = useState<Record<string, ORGroupSummary>>({});
 
   // Load available tests on component mount
   useEffect(() => {
@@ -81,12 +84,44 @@ const EvaluatePage = () => {
       
       console.log('Filtered submissions:', testSubmissions);
       setSubmissions(testSubmissions);
+      
+      // Load OR group summaries for each student
+      await loadOrGroupSummaries(testSubmissions);
+      
       setError(null);
     } catch (error) {
       console.error('Error loading submissions:', error);
       setError(`Failed to load submissions: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadOrGroupSummaries = async (submissions: TestSubmission[]) => {
+    if (!selectedTestId) return;
+    
+    try {
+      // Get unique student names
+      const studentNames = [...new Set(submissions.map(sub => sub.student_name))];
+      
+      const summaries: Record<string, ORGroupSummary> = {};
+      
+      // Load OR group summary for each student
+      for (const studentName of studentNames) {
+        try {
+          const response = await getORGroupSummary(selectedTestId, studentName);
+          if (response.status === 'success') {
+            summaries[studentName] = response.data;
+          }
+        } catch (error) {
+          console.warn(`Failed to load OR group summary for ${studentName}:`, error);
+          // Don't fail if OR groups aren't configured for this test
+        }
+      }
+      
+      setOrGroupSummaries(summaries);
+    } catch (error) {
+      console.error('Error loading OR group summaries:', error);
     }
   };
 
@@ -433,6 +468,32 @@ const EvaluatePage = () => {
                     )}
                   </div>
                 </div>
+
+                {/* OR Group Information */}
+                {(() => {
+                  const studentSummary = orGroupSummaries[submission.student_name];
+                  if (!studentSummary || Object.keys(studentSummary.or_groups).length === 0) return null;
+                  
+                  return (
+                    <div className="bg-purple-50 border-l-4 border-purple-400 px-4 py-3">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Settings className="h-4 w-4 text-purple-600" />
+                        <span className="text-sm font-medium text-purple-900">OR Groups Status</span>
+                      </div>
+                      <div className="space-y-2">
+                        {Object.entries(studentSummary.or_groups).map(([groupId, group]) => (
+                          <div key={groupId} className="text-sm">
+                            <div className="font-medium text-purple-800">{group.title}</div>
+                            <div className="text-purple-600">
+                              Attempted: {group.attempted_questions.length} of {group.questions.length} questions
+                              ({group.earned_marks}/{group.total_possible_marks} marks)
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 <div className="p-4">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

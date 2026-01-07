@@ -2,15 +2,16 @@ import os
 import aiohttp
 import aiofiles
 import asyncio
-from typing import Tuple, Dict, Any, Optional
+from typing import Tuple, Dict, Any, Optional, List
 from dotenv import load_dotenv
 from .exceptions import OCRError, OCRUploadError, OCRProcessingError, OCRTimeoutError
+from .answer_sequence_service import analyze_answer_sequence
 
 load_dotenv()
 
 class OCRService:
     def __init__(self):
-        self.api_key = os.getenv('OCR_API_KEY', '1211|sgU0oiboVJix9EbapjudC8xv23uSAhqtUM58CXma2e7d1c6f')
+        self.api_key = os.getenv('OCR_API_KEY', '1942|JhUikWLXVsvpVILtp6O802ShOtv8dhQQ7NZy5n6Aed2836fe')
         # Use environment variable for base URL, fallback to v3 endpoint
         self.base_url = os.getenv('OCR_API_URL', 'https://www.handwritingocr.com/api/v3')
         self.headers = {
@@ -217,3 +218,46 @@ class OCRService:
             "The real OCR service is either not available or encountered an error.",
             0.85
         )
+
+    async def extract_and_analyze_sequence(
+        self, 
+        image_path: str, 
+        expected_questions: List[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Extract text from image and analyze answer sequence
+        
+        Args:
+            image_path: Path to the image file
+            expected_questions: List of expected question details for sequence analysis
+            
+        Returns:
+            Dictionary containing:
+            - extracted_text: Raw OCR text
+            - ocr_confidence: OCR confidence score
+            - sequence_analysis: Answer sequence analysis results
+        """
+        try:
+            # Extract text using OCR
+            extracted_text, ocr_confidence = await self.extract_text_from_image(image_path)
+            
+            # Analyze answer sequence if we have expected questions
+            sequence_analysis = None
+            if expected_questions and extracted_text.strip():
+                sequence_analysis = analyze_answer_sequence(extracted_text, expected_questions)
+            
+            return {
+                'extracted_text': extracted_text,
+                'ocr_confidence': ocr_confidence,
+                'sequence_analysis': sequence_analysis,
+                'status': 'success'
+            }
+            
+        except Exception as e:
+            return {
+                'extracted_text': '',
+                'ocr_confidence': 0.0,
+                'sequence_analysis': None,
+                'status': 'error',
+                'error': str(e)
+            }

@@ -10,7 +10,8 @@ const Navigation = () => {
     { path: '/create', label: 'Create Test', icon: Plus },
     { path: '/take', label: 'Take Test', icon: BookOpen },
     { path: '/evaluate', label: 'Evaluate', icon: Settings },
-    { path: '/results', label: 'View Results', icon: BarChart3 }
+    { path: '/results', label: 'View Results', icon: BarChart3 },
+    { path: '/results-aggregated', label: 'Analytics', icon: BarChart3 }
   ];
 
   return (

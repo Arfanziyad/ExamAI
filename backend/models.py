@@ -36,6 +36,14 @@ class Question(Base):
     subject_area = Column(String, default="general")
     question_type = Column(String, default="subjective")  # "subjective" or "coding-python"
     
+    # Sub-question support
+    main_question_number = Column(Integer, nullable=True)  # For sub-questions like 1a, 1b
+    sub_question = Column(String, nullable=True)  # "a", "b", "c", etc.
+    
+    # OR Questions Support
+    or_group_id = Column(String, nullable=True)  # e.g., "group_1", "group_2"
+    is_attempted = Column(Integer, default=0)  # 0 = not attempted, 1 = attempted
+    
     # Relationships
     question_paper = relationship("QuestionPaper", back_populates="questions")
     answer_scheme = relationship("AnswerScheme", back_populates="question", uselist=False, cascade="all, delete-orphan")
@@ -65,6 +73,11 @@ class Submission(Base):
     extracted_text = Column(Text, nullable=True)
     ocr_confidence = Column(Float, nullable=True)
     submitted_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Flexible Answer Ordering Support
+    answer_sequence = Column(JSON, nullable=True)  # Stores detected question/sub-question order
+    answer_sections = Column(JSON, nullable=True)  # Parsed answer sections with their content
+    sequence_confidence = Column(Float, default=1.0)  # Confidence in sequence detection
     
     # Relationships - using string references to avoid circular dependency
     question = relationship("Question", back_populates="submissions")

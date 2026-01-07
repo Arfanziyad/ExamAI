@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, BookOpen, BarChart3 } from 'lucide-react';
-import { getTests } from '../services';
+import { Plus, BookOpen, BarChart3, Upload, Zap } from 'lucide-react';
+import { getTests } from '../services/api';
 
 type Test = {
   id: number;
@@ -40,15 +40,31 @@ const Home = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-xl text-white p-8">
         <h1 className="text-3xl font-bold mb-4">Welcome to AI Exam Evaluator</h1>
-        <p className="text-lg opacity-90 mb-6">Intelligent evaluation system for academic assessments</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <p className="text-lg opacity-90 mb-6">Intelligent evaluation system for academic assessments with end-to-end automation</p>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <Link
             to="/create"
             className="bg-white bg-opacity-20 hover:bg-opacity-30 p-4 rounded-lg transition-all duration-200 text-left block"
           >
             <Plus className="h-6 w-6 mb-2" />
             <div className="font-semibold">Create Test</div>
-            <div className="text-sm opacity-80">Upload question papers</div>
+            <div className="text-sm opacity-80">Manual test creation</div>
+          </Link>
+          <Link
+            to="/create-advanced"
+            className="bg-white bg-opacity-20 hover:bg-opacity-30 p-4 rounded-lg transition-all duration-200 text-left block"
+          >
+            <Plus className="h-6 w-6 mb-2" />
+            <div className="font-semibold">Advanced OCR</div>
+            <div className="text-sm opacity-80">Multi-question detection</div>
+          </Link>
+          <Link
+            to="/submit-multi"
+            className="bg-white bg-opacity-20 hover:bg-opacity-30 p-4 rounded-lg transition-all duration-200 text-left block"
+          >
+            <Zap className="h-6 w-6 mb-2" />
+            <div className="font-semibold">Smart Submit</div>
+            <div className="text-sm opacity-80">Auto-map & evaluate</div>
           </Link>
           <Link
             to="/take"
@@ -59,12 +75,12 @@ const Home = () => {
             <div className="text-sm opacity-80">Submit answers</div>
           </Link>
           <Link
-            to="/results"
+            to="/results-aggregated"
             className="bg-white bg-opacity-20 hover:bg-opacity-30 p-4 rounded-lg transition-all duration-200 text-left block"
           >
             <BarChart3 className="h-6 w-6 mb-2" />
-            <div className="font-semibold">View Results</div>
-            <div className="text-sm opacity-80">Check evaluations</div>
+            <div className="font-semibold">Analytics</div>
+            <div className="text-sm opacity-80">Comprehensive results</div>
           </Link>
         </div>
       </div>
