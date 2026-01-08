@@ -447,15 +447,17 @@ def create_multi_question_submission(paper_id):
                 'question_number': q.question_number,
                 'question_text': q.question_text,
                 'max_marks': q.max_marks,
-                'question_id': q.id
+                'question_id': q.id,
+                'or_group_id': q.or_group_id
             } for q in questions]
             
             sequence_analysis = analyze_answer_sequence(extracted_text, expected_questions)
             
-            # Create submissions for each question with mapped answers
-            submission_results = []
-            total_marks = 0
+            # Track OR groups and which questions were answered
+            or_groups_attempted = {}  # {or_group_id: question_id}
+            answered_questions = set()  # Set of question_numbers that have answers
             
+            # First pass: Identify which questions have actual answers
             for question in questions:
                 question_num = str(question.question_number)
                 
@@ -468,13 +470,69 @@ def create_multi_question_submission(paper_id):
                     # Try alternative keys if exact match not found
                     if not answer_text:
                         for key, text in parsed_answers.items():
-                            if key.startswith(f"{question_num}_"):
+                            if key.startswith(f"{question_num}_") or key.startswith(f"{question_num}."):
                                 answer_text = text
                                 break
                 
-                # If no specific answer found, use full text as fallback
-                if not answer_text.strip():
-                    answer_text = extracted_text
+                # Check if this question has a meaningful answer (not just the full text fallback)
+                if answer_text.strip() and answer_text != extracted_text:
+                    answered_questions.add(question_num)
+                    
+                    # Track OR group attempt
+                    if question.or_group_id:
+                        if question.or_group_id not in or_groups_attempted:
+                            or_groups_attempted[question.or_group_id] = question.id
+            
+            # Create submissions and evaluate only eligible questions
+            submission_results = []
+            total_marks = 0
+            skipped_questions = []
+            
+            for question in questions:
+                question_num = str(question.question_number)
+                
+                # Check if this question should be skipped due to OR group logic
+                should_skip = False
+                skip_reason = ""
+                
+                if question.or_group_id:
+                    # If this OR group has been attempted by another question, skip this one
+                    if question.or_group_id in or_groups_attempted:
+                        if or_groups_attempted[question.or_group_id] != question.id:
+                            should_skip = True
+                            skip_reason = f"Skipped - OR group {question.or_group_id} already attempted"
+                            skipped_questions.append({
+                                "question_number": question.question_number,
+                                "question_text": question.question_text[:100] + "...",
+                                "reason": skip_reason,
+                                "or_group_id": question.or_group_id
+                            })
+                
+                if should_skip:
+                    continue
+                
+                # Extract answer for this specific question
+                answer_text = ""
+                if sequence_analysis and sequence_analysis.get('parsed_answers'):
+                    parsed_answers = sequence_analysis['parsed_answers']
+                    answer_text = parsed_answers.get(question_num, "")
+                    
+                    # Try alternative keys if exact match not found
+                    if not answer_text:
+                        for key, text in parsed_answers.items():
+                            if key.startswith(f"{question_num}_") or key.startswith(f"{question_num}."):
+                                answer_text = text
+                                break
+                
+                # If no specific answer found, skip this question (don't use full text fallback)
+                if not answer_text.strip() or answer_text == extracted_text:
+                    skipped_questions.append({
+                        "question_number": question.question_number,
+                        "question_text": question.question_text[:100] + "...",
+                        "reason": "No answer detected for this question",
+                        "or_group_id": question.or_group_id
+                    })
+                    continue
                 
                 # Create submission for this question
                 submission = Submission(
@@ -495,22 +553,23 @@ def create_multi_question_submission(paper_id):
                 
                 try:
                     evaluation_result = asyncio.run(evaluator_service.evaluate_submission(
-                        db, submission.id, sequence_analysis
+                        db, submission.id
                     ))
                     
                     if evaluation_result:
-                        total_marks += evaluation_result.marks_awarded
+                        total_marks += evaluation_result.get('marks_awarded', 0)
                         
                         submission_results.append({
                             "submission_id": submission.id,
                             "question_number": question.question_number,
                             "question_text": question.question_text[:100] + "...",
                             "extracted_answer": answer_text[:200] + "...",
-                            "marks_awarded": evaluation_result.marks_awarded,
+                            "marks_awarded": evaluation_result.get('marks_awarded', 0),
                             "max_marks": question.max_marks,
+                            "or_group_id": question.or_group_id,
                             "evaluation": {
-                                "similarity_score": evaluation_result.similarity_score,
-                                "ai_feedback": evaluation_result.ai_feedback
+                                "similarity_score": evaluation_result.get('similarity_score', 0),
+                                "ai_feedback": evaluation_result.get('ai_feedback', 'No feedback available')
                             }
                         })
                     else:
@@ -533,12 +592,30 @@ def create_multi_question_submission(paper_id):
                         "extracted_answer": answer_text[:200] + "...",
                         "marks_awarded": 0,
                         "max_marks": question.max_marks,
+                        "or_group_id": question.or_group_id,
                         "evaluation": None,
                         "error": str(eval_error)
                     })
             
-            # Calculate total possible marks
-            total_possible_marks = sum(q.max_marks for q in questions)
+            # Calculate total possible marks considering OR groups
+            # For OR groups: only count the max marks of ONE question from each group
+            or_group_max_marks = {}
+            total_possible_marks = 0
+            
+            for q in questions:
+                if q.or_group_id:
+                    # Track max marks per OR group (only count once per group)
+                    if q.or_group_id not in or_group_max_marks:
+                        or_group_max_marks[q.or_group_id] = q.max_marks
+                    else:
+                        # Take the maximum marks among questions in the same OR group
+                        or_group_max_marks[q.or_group_id] = max(or_group_max_marks[q.or_group_id], q.max_marks)
+                else:
+                    # Not in OR group, count normally
+                    total_possible_marks += q.max_marks
+            
+            # Add OR group marks (one per group)
+            total_possible_marks += sum(or_group_max_marks.values())
             
             return jsonify({
                 "success": True,
@@ -549,6 +626,11 @@ def create_multi_question_submission(paper_id):
                 "total_possible_marks": total_possible_marks,
                 "percentage": round((total_marks / total_possible_marks) * 100, 2) if total_possible_marks > 0 else 0,
                 "submissions": submission_results,
+                "skipped_questions": skipped_questions,
+                "or_groups_info": {
+                    "attempted_groups": or_groups_attempted,
+                    "total_or_groups": len(or_group_max_marks)
+                },
                 "sequence_analysis": {
                     "detected_sequence": sequence_analysis.get('answer_sequence', []) if sequence_analysis else [],
                     "confidence": sequence_analysis.get('sequence_confidence', 0) if sequence_analysis else 0
@@ -764,13 +846,17 @@ def get_all_submissions():
         try:
 
             
-            # Get all submissions with their evaluations
-            submissions = db.query(Submission).all()
+            # Get all submissions with their evaluations and question paper info
+            submissions = db.query(Submission).join(Question).all()
             result = []
             
             for submission in submissions:
                 # Get evaluation for this submission if it exists
                 evaluation = db.query(Evaluation).filter(Evaluation.submission_id == submission.id).first()
+                
+                # Get question to retrieve question_paper_id
+                question = db.query(Question).filter(Question.id == submission.question_id).first()
+                question_paper_id = question.question_paper_id if question else None
                 
                 submitted_at = None
                 if hasattr(submission, 'submitted_at') and submission.submitted_at is not None:
@@ -779,6 +865,7 @@ def get_all_submissions():
                 submission_data = {
                     "id": submission.id,
                     "question_id": submission.question_id,
+                    "question_paper_id": question_paper_id,
                     "student_name": submission.student_name,
                     "handwriting_image_path": submission.handwriting_image_path,
                     "extracted_text": getattr(submission, 'extracted_text', None),

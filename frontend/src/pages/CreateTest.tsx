@@ -60,11 +60,16 @@ const CreateTest = () => {
   const [showOrGroupConfig, setShowOrGroupConfig] = useState(false);
   
   // OCR-related state
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [ocrProcessing, setOcrProcessing] = useState(false);
+  const [ocrProcessingProgress, setOcrProcessingProgress] = useState({ current: 0, total: 0 });
   const [ocrResults, setOcrResults] = useState<OCRResults | null>(null);
   const [showManualEntry, setShowManualEntry] = useState(true);
+  
+  // Add Question Modal state
+  const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+  const [newQuestion, setNewQuestion] = useState({ question: '', answer: '', marks: 10, question_type: 'subjective' });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -131,18 +136,38 @@ const CreateTest = () => {
 
   // Question-Answer pair management functions
   const addQuestionAnswerPair = () => {
+    setShowAddQuestionModal(true);
+  };
+
+  const handleAddQuestionConfirm = () => {
+    if (!newQuestion.question.trim() || !newQuestion.answer.trim()) {
+      setError('Please fill in both question and answer');
+      return;
+    }
+    
     const newId = Date.now().toString();
     const nextQuestionNumber = Math.max(...questionAnswerPairs.map(q => q.main_question_number)) + 1;
     setQuestionAnswerPairs([...questionAnswerPairs, { 
       id: newId, 
-      question: '', 
-      answer: '', 
-      marks: 10,
-      question_type: 'subjective',
+      question: newQuestion.question, 
+      answer: newQuestion.answer, 
+      marks: newQuestion.marks,
+      question_type: newQuestion.question_type,
       question_number: `${nextQuestionNumber}a`,
       main_question_number: nextQuestionNumber,
       sub_question: 'a'
     }]);
+    
+    // Reset and close modal
+    setNewQuestion({ question: '', answer: '', marks: 10, question_type: 'subjective' });
+    setShowAddQuestionModal(false);
+    setError('');
+  };
+
+  const handleCancelAddQuestion = () => {
+    setNewQuestion({ question: '', answer: '', marks: 10, question_type: 'subjective' });
+    setShowAddQuestionModal(false);
+    setError('');
   };
 
   const addSubQuestion = (mainQuestionNumber: number) => {
@@ -218,6 +243,26 @@ const CreateTest = () => {
     return questionAnswerPairs.filter(q => !q.sub_question);
   };
 
+  // Check if a main question has sub-questions (for marks display logic)
+  const hasSubQuestions = (mainQuestionNumber: number) => {
+    return questionAnswerPairs.some(q => 
+      q.main_question_number === mainQuestionNumber && q.sub_question
+    );
+  };
+
+  // Calculate total marks (only count questions that should have marks)
+  const calculateTotalMarks = () => {
+    return questionAnswerPairs.reduce((sum, pair) => {
+      // Only count marks if:
+      // 1. It's a sub-question (always has marks), OR
+      // 2. It's a main question without sub-questions (standalone)
+      if (pair.sub_question || !hasSubQuestions(pair.main_question_number)) {
+        return sum + pair.marks;
+      }
+      return sum;
+    }, 0);
+  };
+
   const getSubQuestions = (mainQuestionNumber: number) => {
     return questionAnswerPairs.filter(q => 
       q.main_question_number === mainQuestionNumber && q.sub_question
@@ -226,13 +271,13 @@ const CreateTest = () => {
 
   // OCR functions
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      setSelectedFiles(files);
       
-      // Create preview URL
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+      // Create preview URLs for all files
+      const urls = files.map(file => URL.createObjectURL(file));
+      setPreviewUrls(urls);
       
       // Reset any previous OCR results
       setOcrResults(null);
@@ -240,66 +285,100 @@ const CreateTest = () => {
   };
 
   const processOCR = async () => {
-    if (!selectedFile) {
-      setError('Please select an image file first');
+    if (selectedFiles.length === 0) {
+      setError('Please select at least one image file first');
       return;
     }
 
     setOcrProcessing(true);
     setError('');
+    setOcrProcessingProgress({ current: 0, total: selectedFiles.length });
 
     try {
-      const formData = new FormData();
-      formData.append('file', selectedFile);
-      formData.append('title', testTitle || 'Untitled Question Paper');
-      formData.append('subject', testSubject || 'General');
-      formData.append('description', testDescription || '');
+      let allQuestions: QuestionAnswerPair[] = [];
+      let allOrGroups: string[] = [];
+      let combinedConfidence = 0;
+      let questionIdCounter = 1;
 
-      const response = await fetch('http://localhost:5000/api/ocr/process-question-paper-structured', {
-        method: 'POST',
-        body: formData,
-      });
+      // Process each file sequentially
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        setOcrProcessingProgress({ current: i + 1, total: selectedFiles.length });
 
-      if (!response.ok) {
-        throw new Error(`OCR processing failed: ${response.status}`);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('title', testTitle || 'Untitled Question Paper');
+        formData.append('subject', testSubject || 'General');
+        formData.append('description', testDescription || '');
+
+        const response = await fetch('http://localhost:5000/api/ocr/process-question-paper-structured', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`OCR processing failed for ${file.name}: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (!result.success) {
+          throw new Error(`OCR processing failed for ${file.name}`);
+        }
+
+        // Convert backend format to frontend format and adjust IDs
+        const questions: QuestionAnswerPair[] = result.questions.map((q: any) => {
+          const questionId = `page${i + 1}-${questionIdCounter++}`;
+          return {
+            id: questionId,
+            question: q.question_text,
+            answer: q.answer_text,
+            marks: q.max_marks || 10,
+            question_type: q.question_type || 'subjective',
+            question_number: q.display_number || q.question_number.toString(),
+            main_question_number: q.main_question_number || q.question_number,
+            sub_question: q.sub_question || "",
+            or_group_id: q.or_group_id ? `page${i + 1}-${q.or_group_id}` : undefined
+          };
+        });
+
+        allQuestions = [...allQuestions, ...questions];
+        combinedConfidence += result.confidence || 0;
+
+        // Collect OR groups with page prefix
+        if (result.or_groups_summary?.or_groups?.length > 0) {
+          const pageGroups = result.or_groups_summary.or_groups.map((group: any) => `page${i + 1}-${group.group_id}`);
+          allOrGroups = [...allOrGroups, ...pageGroups];
+        }
       }
 
-      const result = await response.json();
-      
-      if (!result.success) {
-        throw new Error('OCR processing failed');
-      }
+      // Calculate average confidence
+      const avgConfidence = combinedConfidence / selectedFiles.length;
 
-      // Convert backend format to frontend format
-      const questions: QuestionAnswerPair[] = result.questions.map((q: any) => ({
-        id: q.display_number || q.question_number.toString(),
-        question: q.question_text,
-        answer: q.answer_text,
-        marks: q.max_marks || 10,
-        question_type: q.question_type || 'subjective',
-        question_number: q.display_number || q.question_number.toString(),
-        main_question_number: q.main_question_number || q.question_number,
-        sub_question: q.sub_question || "",
-        or_group_id: q.or_group_id
-      }));
-      
       setOcrResults({ 
-        questions,
-        or_groups_summary: result.or_groups_summary,
-        extracted_text: result.extracted_text,
-        confidence: result.confidence
+        questions: allQuestions,
+        or_groups_summary: allOrGroups.length > 0 ? {
+          or_groups: allOrGroups.map((gid, idx) => ({
+            group_id: gid,
+            title: `OR Group ${idx + 1}`,
+            questions: allQuestions.filter(q => q.or_group_id === gid),
+            total_marks: allQuestions.filter(q => q.or_group_id === gid).reduce((sum, q) => sum + q.marks, 0)
+          })),
+          standalone_questions: allQuestions.filter(q => !q.or_group_id),
+          total_or_groups: allOrGroups.length,
+          auto_detected: true
+        } : undefined,
+        extracted_text: `Combined from ${selectedFiles.length} page(s)`,
+        confidence: avgConfidence
       });
 
       // Auto-populate the question-answer pairs
-      setQuestionAnswerPairs(questions);
+      setQuestionAnswerPairs(allQuestions);
       
       // Auto-populate OR groups if detected
-      if (result.or_groups_summary?.or_groups?.length > 0) {
-        const detectedGroups = result.or_groups_summary.or_groups.map((group: any) => group.group_id);
-        setOrGroups(detectedGroups);
-        
-        // Show notification about auto-detected OR groups
-        console.log(`Auto-detected ${detectedGroups.length} OR groups from the scanned document`);
+      if (allOrGroups.length > 0) {
+        setOrGroups(allOrGroups);
+        console.log(`Auto-detected ${allOrGroups.length} OR groups from ${selectedFiles.length} scanned page(s)`);
       }
 
     } catch (error) {
@@ -307,6 +386,7 @@ const CreateTest = () => {
       setError(`OCR processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setOcrProcessing(false);
+      setOcrProcessingProgress({ current: 0, total: 0 });
     }
   };
 
@@ -349,12 +429,11 @@ const CreateTest = () => {
   };
 
   const clearOCR = () => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
+    setSelectedFiles([]);
+    previewUrls.forEach(url => URL.revokeObjectURL(url));
+    setPreviewUrls([]);
     setOcrResults(null);
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
+    setOcrProcessingProgress({ current: 0, total: 0 });
   };
 
   const handleReset = () => {
@@ -456,7 +535,7 @@ const CreateTest = () => {
           </div>
           
           <p className="text-gray-600 mb-4">
-            Upload an image containing both questions and model answers. Our OCR will automatically extract and classify the text.
+            Upload one or more images containing questions and model answers. Select multiple pages to scan an entire exam paper. Our OCR will automatically extract and classify the text.
           </p>
 
           <div className="space-y-4">
@@ -466,6 +545,7 @@ const CreateTest = () => {
                 type="file"
                 id="image-upload"
                 accept="image/*"
+                multiple
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -476,34 +556,43 @@ const CreateTest = () => {
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <Upload className="w-8 h-8 mb-2 text-gray-400" />
                   <p className="mb-2 text-sm text-gray-500">
-                    <span className="font-semibold">Click to upload</span> an image
+                    <span className="font-semibold">Click to upload</span> one or more images
                   </p>
-                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  <p className="text-xs text-gray-500">Select multiple pages for complete exam papers • PNG, JPG, GIF up to 10MB each</p>
                 </div>
               </label>
             </div>
 
             {/* Preview and Process */}
-            {selectedFile && (
+            {selectedFiles.length > 0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Selected: {selectedFile.name}</span>
+                  <span className="text-sm font-medium text-gray-700">
+                    Selected: {selectedFiles.length} page{selectedFiles.length > 1 ? 's' : ''} ({selectedFiles.map(f => f.name).join(', ')})
+                  </span>
                   <button
                     type="button"
                     onClick={clearOCR}
                     className="text-red-600 hover:text-red-800 text-sm"
                   >
-                    Remove
+                    Remove All
                   </button>
                 </div>
                 
-                {previewUrl && (
-                  <div className="max-w-md">
-                    <img 
-                      src={previewUrl} 
-                      alt="Preview" 
-                      className="w-full h-auto rounded-lg shadow-md"
-                    />
+                {previewUrls.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                    {previewUrls.map((url, index) => (
+                      <div key={index} className="relative">
+                        <div className="absolute top-2 left-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full font-semibold z-10">
+                          Page {index + 1}
+                        </div>
+                        <img 
+                          src={url} 
+                          alt={`Preview ${index + 1}`} 
+                          className="w-full h-auto rounded-lg shadow-md border-2 border-gray-200"
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
 
@@ -517,12 +606,12 @@ const CreateTest = () => {
                     {ocrProcessing ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Processing OCR...
+                        Processing Page {ocrProcessingProgress.current} of {ocrProcessingProgress.total}...
                       </>
                     ) : (
                       <>
-                        <FileText className="h-4 w-4 mr-2" />
-                        Process OCR
+                        <Camera className="h-4 w-4 mr-2" />
+                        Process {selectedFiles.length} Page{selectedFiles.length > 1 ? 's' : ''}
                       </>
                     )}
                   </button>
@@ -542,10 +631,80 @@ const CreateTest = () => {
                         )}
                       </div>
                       <p className="text-sm text-green-700">
-                        Extracted and classified {ocrResults.questions.length} question-answer pair(s).
+                        Extracted and classified {ocrResults.questions.length} question-answer pair(s) from {selectedFiles.length} page{selectedFiles.length > 1 ? 's' : ''}.
                         Text has been automatically populated in the form fields below.
                         You can review and edit the extracted text as needed.
                       </p>
+                    </div>
+
+                    {/* Detailed OCR Results Review */}
+                    <div className="bg-white border border-gray-300 rounded-lg p-4">
+                      <div className="flex items-center mb-3">
+                        <FileText className="h-5 w-5 text-indigo-600 mr-2" />
+                        <span className="font-medium text-indigo-800">Review Extracted Questions & Answers</span>
+                      </div>
+                      <div className="space-y-3 max-h-96 overflow-y-auto">
+                        {ocrResults.questions.map((q, index) => (
+                          <div key={q.id} className="bg-gray-50 border border-gray-200 rounded-md p-3">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="font-semibold text-indigo-700">
+                                Question {q.question_number}
+                              </span>
+                              <div className="flex items-center space-x-2">
+                                <div className="flex items-center space-x-1">
+                                  <label className="text-xs font-medium text-gray-600">Marks:</label>
+                                  <input
+                                    type="number"
+                                    min="1"
+                                    max="100"
+                                    step="0.5"
+                                    value={q.marks}
+                                    onChange={(e) => {
+                                      const value = parseFloat(e.target.value);
+                                      if (!isNaN(value) && value >= 1 && value <= 100) {
+                                        // Update marks in both ocrResults and questionAnswerPairs
+                                        const updatedQuestions = ocrResults.questions.map(question => 
+                                          question.id === q.id ? { ...question, marks: value } : question
+                                        );
+                                        setOcrResults({ ...ocrResults, questions: updatedQuestions });
+                                        
+                                        const updatedPairs = questionAnswerPairs.map(pair =>
+                                          pair.id === q.id ? { ...pair, marks: value } : pair
+                                        );
+                                        setQuestionAnswerPairs(updatedPairs);
+                                      }
+                                    }}
+                                    className="w-16 px-2 py-1 border border-indigo-300 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500 text-center font-semibold bg-white"
+                                    title="Edit marks for this question"
+                                  />
+                                </div>
+                                <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                  {q.question_type === 'coding-python' ? 'Coding' : 'Subjective'}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <div>
+                                <p className="text-xs font-medium text-gray-600 mb-1">Question:</p>
+                                <p className="text-sm text-gray-800 bg-white p-2 rounded border border-gray-200">
+                                  {q.question || '(No question text extracted)'}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-medium text-gray-600 mb-1">Model Answer:</p>
+                                <p className="text-sm text-gray-800 bg-white p-2 rounded border border-gray-200">
+                                  {q.answer || '(No answer text extracted)'}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 pt-3 border-t border-gray-200">
+                        <p className="text-xs text-gray-600">
+                          💡 All extracted content has been auto-filled in the form below. Scroll down to review and edit each question.
+                        </p>
+                      </div>
                     </div>
 
                     {/* OR Groups Auto-Detection Results */}
@@ -571,8 +730,8 @@ const CreateTest = () => {
                               </div>
                               <div className="space-y-1">
                                 {group.questions.map((q: any) => (
-                                  <div key={q.question_number} className="text-xs text-purple-600">
-                                    • Question {q.display_number || q.question_number}: {q.question_text.substring(0, 60)}...
+                                  <div key={q.id || q.question_number} className="text-xs text-purple-600">
+                                    • Question {q.question_number}: {q.question ? q.question.substring(0, 60) : 'No text'}...
                                   </div>
                                 ))}
                               </div>
@@ -595,6 +754,122 @@ const CreateTest = () => {
           </div>
         </div>
 
+        {/* Add Question Modal */}
+        {showAddQuestionModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-gray-900">Add New Question</h3>
+                  <button
+                    onClick={handleCancelAddQuestion}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Question Type and Marks */}
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Question Type</label>
+                      <select
+                        value={newQuestion.question_type}
+                        onChange={(e) => setNewQuestion({ ...newQuestion, question_type: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500"
+                      >
+                        <option value="subjective">Subjective</option>
+                        <option value="coding-python">Coding - Python</option>
+                      </select>
+                    </div>
+                    <div className="w-32">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Marks</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="100"
+                        step="0.5"
+                        value={newQuestion.marks}
+                        onChange={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (!isNaN(value) && value >= 1 && value <= 100) {
+                            setNewQuestion({ ...newQuestion, marks: value });
+                          }
+                        }}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Question Input Box */}
+                  <div className="bg-gray-50 border border-gray-300 rounded-lg p-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Question Text {newQuestion.question_type === 'coding-python' && <span className="text-indigo-600">(Python Coding)</span>}
+                    </label>
+                    <textarea
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500"
+                      rows={6}
+                      placeholder={
+                        newQuestion.question_type === 'coding-python'
+                          ? 'Write a Python function to solve the following problem...'
+                          : 'Enter your question here...'
+                      }
+                      value={newQuestion.question}
+                      onChange={(e) => setNewQuestion({ ...newQuestion, question: e.target.value })}
+                    />
+                  </div>
+
+                  {/* Answer Input Box */}
+                  <div className="bg-gray-50 border border-gray-300 rounded-lg p-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Model Answer {newQuestion.question_type === 'coding-python' && <span className="text-indigo-600">(Python Code)</span>}
+                    </label>
+                    <textarea
+                      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:border-indigo-500 focus:ring-indigo-500 ${
+                        newQuestion.question_type === 'coding-python' ? 'font-mono text-sm' : ''
+                      }`}
+                      rows={6}
+                      placeholder={
+                        newQuestion.question_type === 'coding-python'
+                          ? 'def solve_problem():\n    # Your solution here\n    pass'
+                          : 'Enter the model answer here...'
+                      }
+                      value={newQuestion.answer}
+                      onChange={(e) => setNewQuestion({ ...newQuestion, answer: e.target.value })}
+                    />
+                    {newQuestion.question_type === 'coding-python' && (
+                      <p className="mt-2 text-xs text-gray-500">
+                        💡 Tip: Include test cases in comments (e.g., # test: input -&gt; expected_output)
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex justify-end space-x-3 pt-4">
+                    <button
+                      type="button"
+                      onClick={handleCancelAddQuestion}
+                      className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleAddQuestionConfirm}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                    >
+                      Add Question
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Questions and Answers */}
         {showManualEntry && (
           <div className="space-y-6">
@@ -608,7 +883,7 @@ const CreateTest = () => {
                   <div className="flex items-center space-x-4">
                     <div>
                       <span className="text-sm font-medium text-indigo-700">
-                        Total Marks: {questionAnswerPairs.reduce((sum, pair) => sum + pair.marks, 0)}
+                        Total Marks: {calculateTotalMarks()}
                       </span>
                     </div>
                     <div className="text-xs text-indigo-600">
@@ -652,29 +927,49 @@ const CreateTest = () => {
                 {orGroups.length > 0 && (
                   <div className="mb-6">
                     <h5 className="font-medium text-purple-800 mb-3">Existing OR Groups:</h5>
+                    <p className="text-xs text-purple-600 mb-3 italic">
+                      Students can choose to answer any ONE question from each OR group
+                    </p>
                     {orGroups.map(groupId => {
                       const groupQuestions = getQuestionsInGroup(groupId);
                       if (groupQuestions.length === 0) return null;
                       
                       return (
-                        <div key={groupId} className="bg-white rounded-lg p-4 mb-3 border border-purple-200">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium text-purple-900">
-                              OR Group {orGroups.indexOf(groupId) + 1}
-                            </span>
+                        <div key={groupId} className="bg-white rounded-lg p-4 mb-3 border-2 border-purple-300 shadow-sm">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-2">
+                              <span className="font-semibold text-purple-900 text-base">
+                                OR Group {orGroups.indexOf(groupId) + 1}
+                              </span>
+                              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
+                                Choose 1 of {groupQuestions.length}
+                              </span>
+                            </div>
                             <button
                               type="button"
                               onClick={() => {
                                 groupQuestions.forEach(q => removeFromOrGroup(q.id));
                                 setOrGroups(orGroups.filter(id => id !== groupId));
                               }}
-                              className="text-red-600 hover:text-red-800 text-sm"
+                              className="text-red-600 hover:text-red-800 text-sm font-medium"
                             >
                               Remove Group
                             </button>
                           </div>
-                          <div className="text-sm text-purple-600">
-                            Questions: {groupQuestions.map((q, idx) => `Q${questionAnswerPairs.findIndex(p => p.id === q.id) + 1}`).join(', ')}
+                          <div className="flex flex-wrap gap-2">
+                            {groupQuestions.map((q, idx) => (
+                              <div key={q.id} className="flex items-center">
+                                <span className="bg-purple-100 text-purple-800 px-3 py-1.5 rounded-lg font-medium text-sm border border-purple-200">
+                                  {q.question_number}
+                                </span>
+                                {idx < groupQuestions.length - 1 && (
+                                  <span className="mx-2 text-purple-500 font-bold">OR</span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="mt-2 text-xs text-gray-600">
+                            Total marks: {groupQuestions.reduce((sum, q) => sum + q.marks, 0)} pts
                           </div>
                         </div>
                       );
@@ -727,28 +1022,37 @@ const CreateTest = () => {
                             <option value="coding-python">Coding - Python</option>
                           </select>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <label className="text-sm text-gray-600 font-medium">Marks:</label>
-                          <div className="flex items-center space-x-1">
-                            <input
-                              type="number"
-                              min="1"
-                              max="100"
-                              step="0.5"
-                              value={mainQuestion.marks}
-                              onChange={(e) => {
-                                const value = parseFloat(e.target.value);
-                                if (!isNaN(value) && value > 0 && value <= 100) {
-                                  updateQuestionAnswerPair(mainQuestion.id, 'marks', value);
-                                } else if (e.target.value === '') {
-                                  updateQuestionAnswerPair(mainQuestion.id, 'marks', 1);
-                                }
-                              }}
-                              className="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:border-indigo-500 focus:ring-indigo-500 text-center font-medium"
-                              title="Set marks for this question (1-100, decimals allowed)"
-                            />
+                        {/* Only show marks for standalone questions (no sub-questions) */}
+                        {!hasSubQuestions(mainQuestion.main_question_number) && (
+                          <div className="flex items-center space-x-2">
+                            <label className="text-sm text-gray-600 font-medium">Marks:</label>
+                            <div className="flex items-center space-x-1">
+                              <input
+                                type="number"
+                                min="1"
+                                max="100"
+                                step="0.5"
+                                value={mainQuestion.marks}
+                                onChange={(e) => {
+                                  const value = parseFloat(e.target.value);
+                                  if (!isNaN(value) && value >= 1 && value <= 100) {
+                                    updateQuestionAnswerPair(mainQuestion.id, 'marks', value);
+                                  } else if (e.target.value === '') {
+                                    updateQuestionAnswerPair(mainQuestion.id, 'marks', 1);
+                                  }
+                                }}
+                                className="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:border-indigo-500 focus:ring-indigo-500 text-center font-medium"
+                                title="Set marks for this question (minimum 1)"
+                              />
+                            </div>
                           </div>
-                        </div>
+                        )}
+                        {/* Show label for parent questions */}
+                        {hasSubQuestions(mainQuestion.main_question_number) && (
+                          <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded">
+                            Parent question (marks set in sub-questions)
+                          </div>
+                        )}
                         {questionAnswerPairs.length > 1 && (
                           <button
                             type="button"
@@ -851,14 +1155,14 @@ const CreateTest = () => {
                                 value={subQuestion.marks}
                                 onChange={(e) => {
                                   const value = parseFloat(e.target.value);
-                                  if (!isNaN(value) && value > 0 && value <= 100) {
+                                  if (!isNaN(value) && value >= 1 && value <= 100) {
                                     updateQuestionAnswerPair(subQuestion.id, 'marks', value);
                                   } else if (e.target.value === '') {
                                     updateQuestionAnswerPair(subQuestion.id, 'marks', 1);
                                   }
                                 }}
                                 className="w-16 px-2 py-1 border border-gray-300 rounded text-xs focus:border-indigo-500 focus:ring-indigo-500 text-center font-medium"
-                                title="Set marks for this sub-question (1-100, decimals allowed)"
+                                title="Set marks for this sub-question (minimum 1)"
                               />
                             </div>
                             <button
@@ -947,12 +1251,33 @@ interface ORGroupCreatorProps {
 const ORGroupCreator: React.FC<ORGroupCreatorProps> = ({ questions, questionAnswerPairs, onCreateGroup }) => {
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
 
+  // Group questions by main question number for better OR group visualization
+  const groupedQuestions = questions.reduce((groups, question) => {
+    const mainNum = question.main_question_number;
+    if (!groups[mainNum]) {
+      groups[mainNum] = [];
+    }
+    groups[mainNum].push(question);
+    return groups;
+  }, {} as Record<number, QuestionAnswerPair[]>);
+
   const handleQuestionToggle = (questionId: string) => {
     setSelectedQuestions(prev => 
       prev.includes(questionId)
         ? prev.filter(id => id !== questionId)
         : [...prev, questionId]
     );
+  };
+
+  const handleGroupToggle = (groupQuestions: QuestionAnswerPair[]) => {
+    const groupIds = groupQuestions.map(q => q.id);
+    const allSelected = groupIds.every(id => selectedQuestions.includes(id));
+    
+    if (allSelected) {
+      setSelectedQuestions(prev => prev.filter(id => !groupIds.includes(id)));
+    } else {
+      setSelectedQuestions(prev => [...new Set([...prev, ...groupIds])]);
+    }
   };
 
   const handleCreateGroup = () => {
@@ -978,29 +1303,109 @@ const ORGroupCreator: React.FC<ORGroupCreatorProps> = ({ questions, questionAnsw
         <label className="block text-sm font-medium text-purple-700 mb-2">
           Select Questions for OR Group (minimum 2)
         </label>
-        <div className="space-y-2">
-          {questions.map((question) => {
-            const questionIndex = questionAnswerPairs.findIndex(p => p.id === question.id);
+        <p className="text-xs text-purple-600 mb-3 italic">
+          Students will choose ONE from this group. Example: "1a and 1b" OR "2"
+        </p>
+        <div className="space-y-3">
+          {Object.entries(groupedQuestions).map(([mainNum, groupQuestions]) => {
+            const hasMultiple = groupQuestions.length > 1;
+            const allSelected = groupQuestions.every(q => selectedQuestions.includes(q.id));
+            const someSelected = groupQuestions.some(q => selectedQuestions.includes(q.id));
+            const totalMarks = groupQuestions.reduce((sum, q) => sum + q.marks, 0);
+            
             return (
-              <label key={question.id} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-purple-50">
-                <input
-                  type="checkbox"
-                  checked={selectedQuestions.includes(question.id)}
-                  onChange={() => handleQuestionToggle(question.id)}
-                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-medium text-gray-900">Question {questionIndex + 1}</span>
-                    <span className="text-sm font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
-                      {question.marks} pts
-                    </span>
+              <div key={mainNum} className="border-2 rounded-lg transition-colors border-gray-300 hover:border-purple-300">
+                {hasMultiple ? (
+                  <div>
+                    {/* Group header for sub-questions */}
+                    <div 
+                      className="flex items-center space-x-3 p-3 bg-purple-50 cursor-pointer hover:bg-purple-100 rounded-t-lg"
+                      onClick={() => handleGroupToggle(groupQuestions)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={() => handleGroupToggle(groupQuestions)}
+                        className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-bold text-purple-900">
+                            Q{mainNum} Group ({groupQuestions.map(q => q.sub_question).join(', ')})
+                          </span>
+                          <span className="text-sm font-semibold text-indigo-600 bg-indigo-100 px-2 py-1 rounded">
+                            {totalMarks} pts total
+                          </span>
+                          <span className="text-xs text-purple-600">
+                            {groupQuestions.length} sub-questions
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Sub-questions */}
+                    <div className="bg-white">
+                      {groupQuestions.map((question, idx) => (
+                        <label 
+                          key={question.id} 
+                          className={`flex items-center space-x-3 p-3 pl-10 cursor-pointer hover:bg-purple-50 transition-colors ${
+                            idx === groupQuestions.length - 1 ? 'rounded-b-lg' : 'border-b border-gray-200'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedQuestions.includes(question.id)}
+                            onChange={() => handleQuestionToggle(question.id)}
+                            className="h-3 w-3 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2">
+                              <span className="font-semibold text-purple-800 text-sm">
+                                {question.question_number}
+                              </span>
+                              <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
+                                {question.marks} pts
+                              </span>
+                              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                {question.question_type === 'coding-python' ? 'Coding' : 'Subjective'}
+                              </span>
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1 truncate">
+                              {question.question.substring(0, 80)}{question.question.length > 80 ? '...' : ''}
+                            </p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1 truncate">
-                    {question.question.substring(0, 100)}{question.question.length > 100 ? '...' : ''}
-                  </p>
-                </div>
-              </label>
+                ) : (
+                  /* Standalone question */
+                  <label className="flex items-center space-x-3 p-3 hover:bg-purple-50 cursor-pointer transition-colors rounded-lg">
+                    <input
+                      type="checkbox"
+                      checked={selectedQuestions.includes(groupQuestions[0].id)}
+                      onChange={() => handleQuestionToggle(groupQuestions[0].id)}
+                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-semibold text-purple-900 bg-purple-100 px-2 py-1 rounded">
+                          {groupQuestions[0].question_number}
+                        </span>
+                        <span className="text-sm font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">
+                          {groupQuestions[0].marks} pts
+                        </span>
+                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                          {groupQuestions[0].question_type === 'coding-python' ? 'Coding' : 'Subjective'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1 truncate">
+                        {groupQuestions[0].question.substring(0, 100)}{groupQuestions[0].question.length > 100 ? '...' : ''}
+                      </p>
+                    </div>
+                  </label>
+                )}
+              </div>
             );
           })}
         </div>

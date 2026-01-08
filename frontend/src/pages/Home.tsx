@@ -41,7 +41,7 @@ const Home = () => {
       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-xl text-white p-8">
         <h1 className="text-3xl font-bold mb-4">Welcome to AI Exam Evaluator</h1>
         <p className="text-lg opacity-90 mb-6">Intelligent evaluation system for academic assessments with end-to-end automation</p>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Link
             to="/create"
             className="bg-white bg-opacity-20 hover:bg-opacity-30 p-4 rounded-lg transition-all duration-200 text-left block"
@@ -49,14 +49,6 @@ const Home = () => {
             <Plus className="h-6 w-6 mb-2" />
             <div className="font-semibold">Create Test</div>
             <div className="text-sm opacity-80">Manual test creation</div>
-          </Link>
-          <Link
-            to="/create-advanced"
-            className="bg-white bg-opacity-20 hover:bg-opacity-30 p-4 rounded-lg transition-all duration-200 text-left block"
-          >
-            <Plus className="h-6 w-6 mb-2" />
-            <div className="font-semibold">Advanced OCR</div>
-            <div className="text-sm opacity-80">Multi-question detection</div>
           </Link>
           <Link
             to="/submit-multi"

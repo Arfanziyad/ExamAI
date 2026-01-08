@@ -3,6 +3,7 @@ import logging
 from typing import Dict, Any, Optional
 from evaluators.subjective_evaluator import SubjectiveEvaluator
 from evaluators.coding_evaluator import CodingEvaluator
+from evaluators.gemini_evaluator import GeminiEvaluator
 from sqlalchemy.orm import Session
 from models import Submission, QuestionPaper, Question, AnswerScheme, Evaluation
 from .answer_sequence_service import analyze_answer_sequence
@@ -13,7 +14,15 @@ class EvaluatorService:
     def __init__(self):
         self.subjective_evaluator = SubjectiveEvaluator()
         self.coding_evaluator = CodingEvaluator()
-        logger.info("EvaluatorService initialized with both SubjectiveEvaluator and CodingEvaluator")
+        self.gemini_evaluator = GeminiEvaluator()
+        
+        # Hybrid evaluation settings
+        self.use_hybrid = True  # Enable hybrid evaluation
+        self.gemini_weight = 0.6  # 60% Gemini, 40% transformer-based
+        self.confidence_threshold = 0.7  # Use Gemini when transformer confidence is low
+        
+        logger.info(f"EvaluatorService initialized with Subjective, Coding, and Gemini evaluators")
+        logger.info(f"Hybrid mode: {self.use_hybrid}, Gemini available: {self.gemini_evaluator.is_available()}")
     
     async def evaluate_submission_with_ocr(
         self, 
@@ -179,57 +188,183 @@ class EvaluatorService:
         max_marks: int = 10
     ) -> Dict[str, Any]:
         """
-        Evaluate student answer using the appropriate evaluator based on question type
+        Evaluate student answer using hybrid approach (Transformer + Gemini LLM)
+        
+        Strategy:
+        1. Always run transformer-based evaluation (fast, free)
+        2. If Gemini is available and hybrid mode is enabled:
+           - Run Gemini evaluation in parallel
+           - Combine scores with weighted average
+           - Use Gemini feedback for richer insights
+        3. Fall back to transformer-only if Gemini fails
         """
         try:
             start_time = time.time()
             
-            # Log evaluation start
-            logger.info(f"Starting evaluation for question type: {question_type}, subject: {subject_area}")
+            logger.info(f"Starting hybrid evaluation for question type: {question_type}, subject: {subject_area}")
             logger.debug(f"Question length: {len(question_text)}, Student answer length: {len(student_answer)}")
             
-            # Choose the appropriate evaluator
+            # Step 1: Always run transformer-based evaluation (fast baseline)
             if question_type == 'coding-python':
-                evaluation_result = self.coding_evaluator.evaluate(
+                transformer_result = self.coding_evaluator.evaluate(
                     question=question_text,
                     student_answer=student_answer,
                     model_answer=model_answer
                 )
             else:
-                # Default to subjective evaluation
-                evaluation_result = self.subjective_evaluator.evaluate(
+                transformer_result = self.subjective_evaluator.evaluate(
                     question=question_text,
                     student_answer=student_answer,
                     model_answer=model_answer,
                     subject_area=subject_area
                 )
             
-            # Calculate evaluation time
-            evaluation_time = time.time() - start_time
+            # Step 2: Check if we should use hybrid evaluation
+            use_gemini = (
+                self.use_hybrid and 
+                self.gemini_evaluator.is_available() and 
+                question_type != 'coding-python'  # Use transformer for coding for now
+            )
             
-            # Scale marks to match max_marks
-            original_marks = evaluation_result.get('marks_awarded', 0)
-            scaled_marks = min(int((original_marks / 10) * max_marks), max_marks)
+            if use_gemini:
+                logger.info("Running hybrid evaluation with Gemini")
+                
+                try:
+                    # Run Gemini evaluation
+                    gemini_result = self.gemini_evaluator.evaluate(
+                        question=question_text,
+                        student_answer=student_answer,
+                        model_answer=model_answer,
+                        subject_area=subject_area,
+                        max_marks=10  # Gemini evaluates out of 10
+                    )
+                    
+                    # Combine results using weighted average
+                    final_result = self._combine_evaluations(
+                        transformer_result, 
+                        gemini_result, 
+                        max_marks
+                    )
+                    
+                    logger.info(f"Hybrid evaluation: Transformer={transformer_result['marks_awarded']}, "
+                              f"Gemini={gemini_result['marks_awarded']}, "
+                              f"Combined={final_result['marks_awarded']}")
+                    
+                except Exception as e:
+                    logger.warning(f"Gemini evaluation failed, using transformer only: {str(e)}")
+                    final_result = self._scale_transformer_result(transformer_result, max_marks)
+                    final_result['evaluation_mode'] = 'transformer_only_fallback'
+            else:
+                # Use transformer-only evaluation
+                final_result = self._scale_transformer_result(transformer_result, max_marks)
+                final_result['evaluation_mode'] = 'transformer_only'
+                
+                if not self.gemini_evaluator.is_available():
+                    logger.debug("Gemini not available, using transformer-only evaluation")
             
-            # Prepare final result
-            final_result = {
-                'similarity_score': evaluation_result.get('similarity_score', 0.0),
-                'marks_awarded': scaled_marks,
-                'max_marks': max_marks,
-                'detailed_scores': evaluation_result.get('detailed_scores', {}),
-                'ai_feedback': evaluation_result.get('feedback', 'No feedback available'),
-                'subject_area': evaluation_result.get('subject_area', subject_area),
-                'evaluation_time': evaluation_time,
-                'original_marks_out_of_10': original_marks
-            }
+            # Add common metadata
+            final_result['evaluation_time'] = time.time() - start_time
+            final_result['subject_area'] = subject_area
             
-            logger.info(f"Evaluation completed. Score: {scaled_marks}/{max_marks}, Time: {evaluation_time:.2f}s")
+            logger.info(f"Evaluation completed. Score: {final_result['marks_awarded']}/{max_marks}, "
+                       f"Time: {final_result['evaluation_time']:.2f}s, "
+                       f"Mode: {final_result.get('evaluation_mode', 'unknown')}")
+            
             return final_result
             
         except Exception as e:
             logger.error(f"Evaluation failed: {str(e)}")
-            # Return fallback evaluation
             return self._fallback_evaluation(max_marks, str(e))
+    
+    def _combine_evaluations(
+        self, 
+        transformer_result: Dict[str, Any], 
+        gemini_result: Dict[str, Any],
+        max_marks: int
+    ) -> Dict[str, Any]:
+        """
+        Intelligently combine transformer and Gemini evaluation results
+        
+        Strategy:
+        - Use weighted average for marks
+        - Prefer Gemini's feedback (more detailed)
+        - Merge detailed scores from both
+        """
+        # Get marks from both evaluators (out of 10)
+        transformer_marks = transformer_result.get('marks_awarded', 0)
+        gemini_marks = gemini_result.get('marks_awarded', 0)
+        
+        # Weighted combination
+        combined_marks_10 = (
+            transformer_marks * (1 - self.gemini_weight) +
+            gemini_marks * self.gemini_weight
+        )
+        
+        # Scale to actual max_marks
+        scaled_marks = min(int((combined_marks_10 / 10) * max_marks), max_marks)
+        
+        # Combine detailed scores
+        detailed_scores = {}
+        
+        # Add transformer scores
+        if 'detailed_scores' in transformer_result:
+            for key, value in transformer_result['detailed_scores'].items():
+                detailed_scores[f'transformer_{key}'] = value
+        
+        # Add Gemini scores
+        if 'detailed_scores' in gemini_result:
+            for key, value in gemini_result['detailed_scores'].items():
+                detailed_scores[f'gemini_{key}'] = value
+        
+        # Build enhanced feedback
+        feedback_parts = []
+        
+        # Use Gemini's detailed feedback if available
+        if gemini_result.get('feedback'):
+            feedback_parts.append(gemini_result['feedback'])
+        
+        # Add Gemini insights
+        if gemini_result.get('strengths'):
+            feedback_parts.append(f"\n✓ Strengths: {', '.join(gemini_result['strengths'])}")
+        
+        if gemini_result.get('weaknesses'):
+            feedback_parts.append(f"\n✗ Areas for improvement: {', '.join(gemini_result['weaknesses'])}")
+        
+        if gemini_result.get('missing_points'):
+            feedback_parts.append(f"\n• Missing points: {', '.join(gemini_result['missing_points'])}")
+        
+        # Fallback to transformer feedback if Gemini didn't provide any
+        if not feedback_parts and transformer_result.get('feedback'):
+            feedback_parts.append(transformer_result['feedback'])
+        
+        combined_feedback = '\n'.join(feedback_parts) if feedback_parts else "No feedback available"
+        
+        return {
+            'marks_awarded': scaled_marks,
+            'max_marks': max_marks,
+            'similarity_score': scaled_marks / max_marks,
+            'ai_feedback': combined_feedback,
+            'detailed_scores': detailed_scores,
+            'evaluation_mode': 'hybrid',
+            'transformer_marks': transformer_marks,
+            'gemini_marks': gemini_marks,
+            'combined_marks_out_of_10': combined_marks_10,
+            'original_marks_out_of_10': combined_marks_10
+        }
+    
+    def _scale_transformer_result(self, transformer_result: Dict[str, Any], max_marks: int) -> Dict[str, Any]:
+        """Scale transformer result to match max_marks"""
+        original_marks = transformer_result.get('marks_awarded', 0)
+        scaled_marks = min(int((original_marks / 10) * max_marks), max_marks)
+        
+        return {
+            'marks_awarded': scaled_marks,
+            'max_marks': max_marks,
+            'similarity_score': transformer_result.get('similarity_score', 0.0),
+            'ai_feedback': transformer_result.get('feedback', 'No feedback available'),
+            'detailed_scores': transformer_result.get('detailed_scores', {}),
+            'original_marks_out_of_10': original_marks
+        }
     
     def _fallback_evaluation(self, max_marks: int, error_message: str) -> Dict[str, Any]:
         """

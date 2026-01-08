@@ -11,7 +11,7 @@ load_dotenv()
 
 class OCRService:
     def __init__(self):
-        self.api_key = os.getenv('OCR_API_KEY', '1942|JhUikWLXVsvpVILtp6O802ShOtv8dhQQ7NZy5n6Aed2836fe')
+        self.api_key = os.getenv('OCR_API_KEY', '1943|2wbwSBM4JUC8aYsjZJZfxYgoNBxvotPcAzfpr0Lz83d27824')
         # Use environment variable for base URL, fallback to v3 endpoint
         self.base_url = os.getenv('OCR_API_URL', 'https://www.handwritingocr.com/api/v3')
         self.headers = {

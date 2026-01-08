@@ -6,6 +6,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from collections import Counter
+import logging
 
 class SubjectiveEvaluator:
     """Enhanced subjective answer evaluator with multiple evaluation strategies"""
@@ -31,10 +32,20 @@ class SubjectiveEvaluator:
             if len(student_answer.strip()) < 5:
                 return self._handle_insufficient_answer()
             
+            # CASE 1: Check for completely unrelated/irrelevant answer → 0 marks
+            if self._is_completely_unrelated(student_answer, model_answer, question):
+                return self._handle_completely_unrelated_answer()
+            
+            # Check for simple irrelevant patterns
             if self._is_irrelevant_answer(student_answer):
                 return self._handle_irrelevant_answer()
             
-            # Multiple evaluation approaches
+            # CASE 2: Check for exact or near-exact match → Full marks
+            exact_match_result = self._check_exact_match(student_answer, model_answer)
+            if exact_match_result['is_exact_match']:
+                return self._handle_exact_match(exact_match_result['similarity'])
+            
+            # Multiple evaluation approaches for normal cases
             semantic_score = self._semantic_similarity_evaluation(student_answer, model_answer)
             keyword_score = self._keyword_based_evaluation(student_answer, model_answer, subject_area)
             structure_score = self._structure_evaluation(student_answer, model_answer)
@@ -572,12 +583,132 @@ class SubjectiveEvaluator:
         }
     
     def _is_irrelevant_answer(self, answer: str) -> bool:
-        """Check if answer is clearly irrelevant"""
+        """Check if answer is clearly irrelevant (simple pattern matching for obvious cases)"""
+        # Only check if answer is very short (less than 20 chars) to avoid false positives
+        if len(answer.strip()) > 20:
+            return False
+            
         irrelevant_patterns = [
             'i don\'t know', 'idk', 'no idea', 'dunno', 'not sure',
-            'random text', 'test', 'hello', 'hi', 'nothing', 'none',
-            'abcd', '1234', 'xyz', 'blah', 'whatever', 'no clue'
+            'random text', 'test answer', 'hello world', 'nothing', 
+            'no clue', 'dont know', 'i dunno'
         ]
         
         answer_lower = answer.lower().strip()
-        return any(pattern in answer_lower for pattern in irrelevant_patterns)
+        
+        # Must be an exact match or very close match for short answers
+        for pattern in irrelevant_patterns:
+            if answer_lower == pattern or answer_lower.startswith(pattern):
+                return True
+        
+        return False
+    
+    def _is_completely_unrelated(self, student_answer: str, model_answer: str, question: str) -> bool:
+        """
+        Check if student answer is completely unrelated to the question/model answer.
+        Uses semantic similarity to detect if answer is about a completely different topic.
+        """
+        try:
+            # Encode all three texts
+            embeddings = self.semantic_model.encode(
+                [question, model_answer, student_answer], 
+                convert_to_tensor=True
+            )
+            
+            # Calculate similarity between student answer and question
+            question_similarity = util.pytorch_cos_sim(embeddings[0], embeddings[2]).item()
+            
+            # Calculate similarity between student answer and model answer
+            model_similarity = util.pytorch_cos_sim(embeddings[1], embeddings[2]).item()
+            
+            # If both similarities are extremely low, answer is unrelated
+            # Threshold: less than 0.15 (15%) similarity indicates completely different topic
+            unrelated_threshold = 0.15
+            
+            is_unrelated = (question_similarity < unrelated_threshold and 
+                          model_similarity < unrelated_threshold)
+            
+            if is_unrelated:
+                logger = logging.getLogger(__name__)
+                logger.info(f"Detected unrelated answer - Q_sim: {question_similarity:.3f}, M_sim: {model_similarity:.3f}")
+            
+            return is_unrelated
+            
+        except Exception as e:
+            # If error in checking, don't mark as unrelated
+            return False
+    
+    def _check_exact_match(self, student_answer: str, model_answer: str) -> Dict[str, Any]:
+        """
+        Check if student answer is an exact or near-exact match with model answer.
+        Returns dict with is_exact_match flag and similarity score.
+        """
+        try:
+            # Normalize both answers for comparison
+            student_normalized = self._normalize_text(student_answer)
+            model_normalized = self._normalize_text(model_answer)
+            
+            # Check for exact text match (after normalization)
+            if student_normalized == model_normalized:
+                return {'is_exact_match': True, 'similarity': 1.0}
+            
+            # Check semantic similarity for near-exact matches
+            embeddings = self.semantic_model.encode(
+                [model_answer, student_answer], 
+                convert_to_tensor=True
+            )
+            similarity = util.pytorch_cos_sim(embeddings[0], embeddings[1]).item()
+            
+            # Threshold: 0.92 or higher indicates near-exact match (slightly lower for paraphrasing)
+            exact_match_threshold = 0.92
+            
+            if similarity >= exact_match_threshold:
+                logger = logging.getLogger(__name__)
+                logger.info(f"Detected exact/near-exact match - Similarity: {similarity:.3f}")
+                return {'is_exact_match': True, 'similarity': similarity}
+            
+            return {'is_exact_match': False, 'similarity': similarity}
+            
+        except Exception as e:
+            return {'is_exact_match': False, 'similarity': 0.0}
+    
+    def _normalize_text(self, text: str) -> str:
+        """Normalize text for comparison by removing punctuation, extra spaces, and lowercasing"""
+        # Remove punctuation
+        text = re.sub(r'[^\w\s]', ' ', text)
+        # Convert to lowercase
+        text = text.lower()
+        # Remove extra whitespace
+        text = ' '.join(text.split())
+        return text.strip()
+    
+    def _handle_completely_unrelated_answer(self) -> Dict[str, Any]:
+        """Handle completely unrelated answers - award 0 marks"""
+        return {
+            'similarity_score': 0.0,
+            'marks_awarded': 0,
+            'feedback': "The answer provided is completely unrelated to the question asked. It appears to be about a different topic entirely. Please read the question carefully and provide a relevant response.",
+            'detailed_scores': {
+                'semantic': 0,
+                'keyword': 0,
+                'structure': 0,
+                'comprehensiveness': 0,
+                'unrelated_answer': True
+            }
+        }
+    
+    def _handle_exact_match(self, similarity: float) -> Dict[str, Any]:
+        """Handle exact or near-exact matches - award full marks"""
+        return {
+            'similarity_score': 1.0,
+            'marks_awarded': 10,
+            'feedback': "Excellent! Your answer matches the model answer perfectly. You have demonstrated complete understanding of the concept with accurate and comprehensive coverage of all key points.",
+            'detailed_scores': {
+                'semantic': 100,
+                'keyword': 100,
+                'structure': 100,
+                'comprehensiveness': 100,
+                'exact_match': True,
+                'match_similarity': round(similarity * 100, 2)
+            }
+        }

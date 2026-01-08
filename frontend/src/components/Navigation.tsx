@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Plus, BookOpen, Settings, BarChart3 } from 'lucide-react';
+import { Home, Plus, BookOpen, Settings, BarChart3, Zap } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
@@ -8,6 +8,7 @@ const Navigation = () => {
   const navItems = [
     { path: '/', label: 'Dashboard', icon: Home },
     { path: '/create', label: 'Create Test', icon: Plus },
+    { path: '/submit-multi', label: 'Smart Submit', icon: Zap },
     { path: '/take', label: 'Take Test', icon: BookOpen },
     { path: '/evaluate', label: 'Evaluate', icon: Settings },
     { path: '/results', label: 'View Results', icon: BarChart3 },
